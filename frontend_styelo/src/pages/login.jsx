@@ -20,9 +20,9 @@ const SignInPage = () => {
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
-      <div className="flex w-full h-full">
+      <div className="flex w-full h-full px-10 gap-x-16">
         {/* Left section */}
-        <div className="w-[50%] flex items-center justify-end px-10">
+        <div className="w-[55%] flex items-center justify-end">
           <div className="w-full max-w-xl">
             {/* Sign In */}
             <h1 className="text-[54px] font-medium text-black mb-8 text-center">
@@ -74,7 +74,7 @@ const SignInPage = () => {
 
             {/* Forgot Password */}
             <div className="text-right mb-8">
-              <button className="text-sm text-gray-500 hover:text-gray-700">
+              <button className="text-sm text-gray-600 hover:text-gray-700">
                 Forget Password?
               </button>
             </div>
@@ -83,15 +83,16 @@ const SignInPage = () => {
             <button
               onClick={handleSubmit}
               style={{ width: "378.37px", height: "55.93px" }}
-              className="bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-6 hover:bg-[#2D2623] transition-colors"
+              className="bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 hover:bg-[#2D2623] transition-colors"
             >
               Sign in
             </button>
 
             {/* Signup */}
-            <p className="text-base text-center text-gray-700">
+            <p className="text-base text-center text-gray-700 mt-2">
               Don't have an account?{" "}
-              <button className="text-blue-600 hover:text-blue-700 hover:underline transition-colors">
+              <button
+                className="text-blue-600 hover:text-blue-500 hover:underline transition-colors" >
                 Signup
               </button>
             </p>
@@ -99,7 +100,7 @@ const SignInPage = () => {
         </div>
 
         {/* Right section */}
-        <div className="w-[50%] h-full flex items-center justify-start">
+        <div className="w-[55%] h-full flex items-center justify-start">
           <img
             src={rightsideImage}
             alt="Visual"

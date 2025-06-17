@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, KeyRound, UserRound } from "lucide-react";
 
-
-
 import rightsideImage from "../assets/rightside.png";
 import logo from "../assets/logo1.png";
 
@@ -32,9 +30,9 @@ const RegisterPage = () => {
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
-      <div className="flex w-full h-full">
-        {/* Left section - Form */}
-        <div className="w-[50%] flex items-center justify-end px-10">
+      <div className="flex w-full h-full px-10 gap-x-16">
+        {/* Left section */}
+        <div className="w-[50%] flex items-center justify-end">
           <div className="w-full max-w-xl">
             {/* Title */}
             <h1 className="text-[40px] font-medium text-black mb-6 text-center">
@@ -118,9 +116,7 @@ const RegisterPage = () => {
                 <button
                   type="button"
                   className="absolute right-4 top-1/2 transform -translate-y-1/2"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
@@ -143,19 +139,18 @@ const RegisterPage = () => {
               </span>
             </p>
 
-            {/* Submit */}
-           <button
+            {/* Sign Up Button */}
+            <button
               onClick={handleSubmit}
               style={{ width: "378.37px", height: "55.93px" }}
-              className="bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-6 hover:bg-[#2D2623] transition-colors"
+              className="bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 hover:bg-[#2D2623] transition-colors"
             >
               Sign up
             </button>
 
-            {/* Already have account */}
-            <p className="text-base text-center text-gray-700">
+            <p className="text-base text-center text-gray-700 mt-2">
               Already have an account?{" "}
-              <button className="text-blue-600 hover:underline">
+              <button className="text-blue-600 hover:text-blue-500 hover:underline transition-colors">
                 Sign in
               </button>
             </p>
