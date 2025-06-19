@@ -48,7 +48,7 @@ const RegisterPage = () => {
       setIsSubmitting(true);
       const response = await axios.post("/register", {
         ...form,
-        confirmpassword: form.confirmPassword, 
+        confirmpassword: form.confirmPassword,
       });
 
       toast.success("Registration successful. Please log in.");
@@ -67,16 +67,16 @@ const RegisterPage = () => {
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
-      <div className="flex w-full h-full px-10 gap-x-16">
+      <div className="flex w-full h-full px-5 gap-x-10">
         {/* Left section */}
         <div className="w-[55%] flex items-center justify-end">
           <div className="w-full max-w-xl">
-            <h1 className="text-[40px] font-medium text-black mb-6 text-center">
+            <h1 className="text-[40px] font-medium text-black mb-5 text-center">
               Create your account
             </h1>
 
             {/* Username */}
-            <div className="mb-4">
+            <div className="mb-3">
               <label className="block text-base font-medium text-gray-800 mb-2">
                 Username
               </label>
@@ -86,7 +86,7 @@ const RegisterPage = () => {
                   type="text"
                   value={form.username}
                   onChange={(e) => handleChange("username", e.target.value)}
-                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  className="w-[551px] h-[51.93px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
               </div>
               {errors.username && (
@@ -95,7 +95,7 @@ const RegisterPage = () => {
             </div>
 
             {/* Email */}
-            <div className="mb-4">
+            <div className="mb-3">
               <label className="block text-base font-medium text-gray-800 mb-2">
                 Email
               </label>
@@ -105,7 +105,7 @@ const RegisterPage = () => {
                   type="email"
                   value={form.email}
                   onChange={(e) => handleChange("email", e.target.value)}
-                  className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  className="w-[551px] h-[51.93px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
               </div>
               {errors.email && (
@@ -114,17 +114,18 @@ const RegisterPage = () => {
             </div>
 
             {/* Password */}
-            <div className="mb-4">
+            <div className="mb-3">
               <label className="block text-base font-medium text-gray-800 mb-2">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative w-[551px] h-[51.93px]">
                 <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
                   value={form.password}
-                  onChange={(e) => handleChange("password", e.target.value)}
-                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  onChange={handleChange}
+                  className="w-full h-full pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
@@ -144,43 +145,39 @@ const RegisterPage = () => {
             </div>
 
             {/* Confirm Password */}
-            <div className="mb-4">
+
+            <div className="mb-3">
               <label className="block text-base font-medium text-gray-800 mb-2">
                 Confirm Password
               </label>
-              <div className="relative">
+              <div className="relative w-[551px] h-[51.93px]">
                 <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={form.confirmPassword}
-                  onChange={(e) =>
-                    handleChange("confirmPassword", e.target.value)
-                  }
-                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  type={showPassword ? "text" : "ConfirmPassword"}
+                  name="ConfirmPassword"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="w-full h-full pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowConfirmPassword(!showConfirmPassword)
-                  }
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2"
                 >
-                  {showConfirmPassword ? (
+                  {showPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
                   ) : (
                     <Eye className="h-5 w-5 text-gray-400" />
                   )}
                 </button>
               </div>
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmPassword}
-                </p>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
             </div>
 
             {/* Terms */}
-            <p className="text-sm text-center text-gray-700 mb-4">
+            <p className="text-sm text-center text-gray-700 mb-5">
               By signing up, you agree to our{" "}
               <span className="text-blue-600 hover:underline cursor-pointer">
                 Terms of use
@@ -197,7 +194,9 @@ const RegisterPage = () => {
               disabled={isSubmitting}
               style={{ width: "378.37px", height: "55.93px" }}
               className={`bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 ${
-                isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-[#2D2623]"
+                isSubmitting
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#2D2623]"
               } transition-colors`}
             >
               {isSubmitting ? "Signing up..." : "Sign up"}
@@ -216,7 +215,7 @@ const RegisterPage = () => {
         </div>
 
         {/* Right section - Image */}
-        <div className="w-[55%] h-full flex items-center justify-start">
+        <div className="w-[52%] h-full flex items-center justify-start">
           <img
             src={rightsideImage}
             alt="Visual"

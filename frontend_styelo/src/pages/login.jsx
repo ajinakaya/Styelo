@@ -70,7 +70,7 @@ const SignInPage = () => {
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
-      <div className="flex w-full h-full px-10 gap-x-16">
+      <div className="flex w-full h-full px-5 gap-x-10">
         {/* Left section */}
         <div className="w-[55%] flex items-center justify-end">
           <form onSubmit={handleSubmit} className="w-full max-w-xl">
@@ -83,14 +83,14 @@ const SignInPage = () => {
               <label className="block text-base font-medium text-gray-800 mb-3">
                 Email
               </label>
-              <div className="relative">
+              <div className="relative w-[551px] h-[51.93px]">
                 <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type="email"
                   name="email"
                   value={formValues.email}
                   onChange={handleChange}
-                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  className="w-full h-full pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
               </div>
               {errors.email && (
@@ -103,14 +103,14 @@ const SignInPage = () => {
               <label className="block text-base font-medium text-gray-800 mb-3">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative w-[551px] h-[51.93px]">
                 <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formValues.password}
                   onChange={handleChange}
-                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                  className="w-full h-full pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
@@ -130,7 +130,7 @@ const SignInPage = () => {
             </div>
 
             {/* Forgot Password */}
-            <div className="text-right mb-8">
+            <div className="w-[551px] text-right mb-8">
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
@@ -140,12 +140,13 @@ const SignInPage = () => {
               </button>
             </div>
 
-            
             <button
               type="submit"
               disabled={isSubmitting}
               className={`w-[378.37px] h-[55.93px] bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 ${
-                isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-[#2D2623]"
+                isSubmitting
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#2D2623]"
               } transition-colors`}
             >
               {isSubmitting ? "Signing in..." : "Sign in"}
@@ -165,11 +166,11 @@ const SignInPage = () => {
         </div>
 
         {/* Right section */}
-        <div className="w-[55%] h-full flex items-center justify-start">
+        <div className="w-[52%] h-full flex items-center justify-start">
           <img
             src={rightsideImage}
             alt="Visual"
-            className="w-[555px] h-[676px] object-cover rounded-[60px] rounded-br-[30px]"
+             className="w-[555px] h-[676px] object-cover rounded-[60px] rounded-br-[30px]"
           />
         </div>
       </div>
