@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, KeyRound, UserRound } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 import rightsideImage from "../assets/rightside.png";
 import logo from "../assets/logo1.png";
@@ -12,15 +15,49 @@ const RegisterPage = () => {
     confirmPassword: "",
   });
 
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (field, value) => {
     setForm({ ...form, [field]: value });
   };
 
-  const handleSubmit = () => {
-    console.log("Register form:", form);
+  const handleSubmit = async () => {
+    const newErrors = {};
+
+    if (!form.username) newErrors.username = "Username is required";
+    if (!form.email) newErrors.email = "Email is required";
+    else if (!form.email.includes("@")) newErrors.email = "Invalid email";
+
+    if (!form.password) newErrors.password = "Password is required";
+    else if (form.password.length < 8)
+      newErrors.password = "Password should be at least 8 characters";
+
+    if (!form.confirmPassword)
+      newErrors.confirmPassword = "Confirm your password";
+    else if (form.password !== form.confirmPassword)
+      newErrors.confirmPassword = "Passwords doesn't match";
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length !== 0) return;
+
+    try {
+      setIsSubmitting(true);
+      const response = await axios.post("/register", {
+        ...form,
+        confirmpassword: form.confirmPassword, 
+      });
+
+      toast.success("Registration successful. Please log in.");
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Registration failed.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -32,9 +69,8 @@ const RegisterPage = () => {
 
       <div className="flex w-full h-full px-10 gap-x-16">
         {/* Left section */}
-        <div className="w-[50%] flex items-center justify-end">
+        <div className="w-[55%] flex items-center justify-end">
           <div className="w-full max-w-xl">
-            {/* Title */}
             <h1 className="text-[40px] font-medium text-black mb-6 text-center">
               Create your account
             </h1>
@@ -50,9 +86,12 @@ const RegisterPage = () => {
                   type="text"
                   value={form.username}
                   onChange={(e) => handleChange("username", e.target.value)}
-                  className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
+                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
               </div>
+              {errors.username && (
+                <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+              )}
             </div>
 
             {/* Email */}
@@ -69,6 +108,9 @@ const RegisterPage = () => {
                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -82,12 +124,12 @@ const RegisterPage = () => {
                   type={showPassword ? "text" : "password"}
                   value={form.password}
                   onChange={(e) => handleChange("password", e.target.value)}
-                  className="w-full h-[52px] pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white focus:outline-none focus:border-gray-400"
+                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
                   onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
@@ -96,6 +138,9 @@ const RegisterPage = () => {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -111,12 +156,14 @@ const RegisterPage = () => {
                   onChange={(e) =>
                     handleChange("confirmPassword", e.target.value)
                   }
-                  className="w-full h-[52px] pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white focus:outline-none focus:border-gray-400"
+                   className="w-full h-[52px] pl-12 pr-4 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
+                  onClick={() =>
+                    setShowConfirmPassword(!showConfirmPassword)
+                  }
                   className="absolute right-4 top-1/2 transform -translate-y-1/2"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
@@ -125,6 +172,11 @@ const RegisterPage = () => {
                   )}
                 </button>
               </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
 
             {/* Terms */}
@@ -142,15 +194,21 @@ const RegisterPage = () => {
             {/* Sign Up Button */}
             <button
               onClick={handleSubmit}
+              disabled={isSubmitting}
               style={{ width: "378.37px", height: "55.93px" }}
-              className="bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 hover:bg-[#2D2623] transition-colors"
+              className={`bg-[#3D3735] text-white rounded-lg text-[20px] font-medium flex items-center justify-center mx-auto mb-2 ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-[#2D2623]"
+              } transition-colors`}
             >
-              Sign up
+              {isSubmitting ? "Signing up..." : "Sign up"}
             </button>
 
             <p className="text-base text-center text-gray-700 mt-2">
               Already have an account?{" "}
-              <button className="text-blue-600 hover:text-blue-500 hover:underline transition-colors">
+              <button
+                onClick={() => navigate("/login")}
+                className="text-blue-600 hover:text-blue-500 hover:underline transition-colors"
+              >
                 Sign in
               </button>
             </p>
@@ -158,11 +216,11 @@ const RegisterPage = () => {
         </div>
 
         {/* Right section - Image */}
-        <div className="w-[50%] h-full flex items-center justify-start">
+        <div className="w-[55%] h-full flex items-center justify-start">
           <img
             src={rightsideImage}
             alt="Visual"
-            className="w-[565px] h-[687px] object-cover rounded-[60px] rounded-br-[30px]"
+            className="w-[555px] h-[676px] object-cover rounded-[60px] rounded-br-[30px]"
           />
         </div>
       </div>

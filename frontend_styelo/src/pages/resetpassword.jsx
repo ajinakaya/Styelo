@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Lock, ArrowLeft } from "lucide-react";
-
+import { Eye, EyeOff, KeyRound, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
 import logo from "../assets/logo1.png";
 
 const SetNewPassword = () => {
@@ -8,59 +10,68 @@ const SetNewPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const email = localStorage.getItem("resetEmail");
+  const code = localStorage.getItem("resetCode");
+
+  const handleSubmit = async () => {
     if (newPassword !== confirmPassword) {
-      alert("Passwords don't match!");
+      toast.error("Passwords do not match");
       return;
     }
     if (newPassword.length < 8) {
-      alert("Password must be at least 8 characters!");
+      toast.error("Password must be at least 8 characters");
       return;
     }
-    console.log("New password set:", newPassword);
-  };
 
-  const handleBackToLogin = () => {
-    console.log("Navigate back to login");
+    try {
+      const res = await axios.post("/resetpassword", {
+        email,
+        code,
+        newPassword,
+      });
+      toast.success(res.data.message || "Password reset successful!");
+      localStorage.removeItem("resetEmail");
+      localStorage.removeItem("resetCode");
+      navigate("/login");
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Reset failed");
+    }
   };
 
   return (
-    <div className="w-screen h-screen white overflow-hidden font-[Dosis] relative">
-      {/* Logo */}
+    <div className="w-screen h-screen bg-white overflow-hidden font-[Dosis] relative">
       <div className="absolute top-6 left-10">
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
       <div className="flex items-center justify-center h-full">
-        <div className="bg-white rounded-2xl p-12 shadow-sm border border-gray-200 w-full max-w-md">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-medium text-gray-900 mb-2">
+        <div className="bg-white rounded-2xl p-16 shadow-sm border border-gray-200 w-full max-w-lg">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl font-medium text-gray-900 mb-2">
               Set new password
             </h1>
-            <p className="text-gray-600">
-              Must be at least 8 characters
-            </p>
+            <p className="text-gray-600">Must be at least 8 characters</p>
           </div>
 
-          {/* New Password Field */}
-          <div className="mb-4">
+          {/* New Password */}
+          <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               New Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type={showNewPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg text-base bg-white focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors"
+                className="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none"
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
               >
                 {showNewPassword ? (
                   <EyeOff className="h-5 w-5 text-gray-400" />
@@ -71,23 +82,23 @@ const SetNewPassword = () => {
             </div>
           </div>
 
-          {/* Confirm Password Field */}
-          <div className="mb-6">
+          {/* Confirm Password */}
+          <div className="mb-8">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Confirm Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg text-base bg-white focus:outline-none focus:border-gray-400 focus:ring-0 transition-colors"
+                className="w-full h-12 pl-10 pr-12 border border-gray-300 rounded-lg focus:outline-none"
               />
               <button
                 type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-5 w-5 text-gray-400" />
@@ -107,8 +118,8 @@ const SetNewPassword = () => {
 
           <div className="text-center">
             <button
-              onClick={handleBackToLogin}
-              className="text-gray-600 hover:text-gray-800 transition-colors flex items-center justify-center mx-auto"
+              onClick={() => navigate("/login")}
+              className="text-gray-600 hover:text-gray-800 flex items-center justify-center mx-auto"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Login
