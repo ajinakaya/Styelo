@@ -3,7 +3,7 @@ const router = express.Router();
 const AuthValidation = require('../validation/authvalidation');
 const upload = require('../middlewares/upload');
 
-const { authenticateToken } = require('../security/Auth');
+const { authenticateToken } = require('../security/auth');
 const {registerUser,
         loginUser,
         forgetPassword,
