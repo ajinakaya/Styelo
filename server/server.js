@@ -15,7 +15,9 @@ mongoose.connect(process.env.MONGO_URL)
     
    
 // middleware
-app.use(express.json())
+
+
+app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
@@ -30,6 +32,11 @@ app.use(
 // routes
 app.use('/', require('./routes/authroutes')),
 app.use('/users', require('./routes/userroutes'));
+app.use('/furniture', require('./routes/furnitureroutes'));
+app.use('/category', require('./routes/categoryroutes'));
+app.use('/section', require('./routes/sectionroutes'));
+app.use('/returnpolicy', require('./routes/returnpolicyroutes'));
+
 
 
 
