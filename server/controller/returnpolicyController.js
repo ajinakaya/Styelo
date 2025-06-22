@@ -1,4 +1,4 @@
-const ReturnPolicy = require("../models/returnPolicy");
+const ReturnPolicy = require("../models/returnpolicy");
 
 // Create Return Policy
 const createReturnPolicy = async (req, res) => {

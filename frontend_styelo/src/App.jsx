@@ -7,6 +7,9 @@ import RegisterPage from "./pages/register";
 import ForgotPassword from "./pages/forgot passord";
 import SetNewPassword from "./pages/resetpassword";
 import VerificationCode from "./pages/pin";
+import Navbar from "./layout/navbar";
+import Footer from "./layout/footer";
+import HeroSection from "./components/herosection";
 
 axios.defaults.baseURL = "http://localhost:3001";
 axios.defaults.withCredentials = true;
@@ -26,6 +29,10 @@ const App = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/set-new-password" element={<SetNewPassword />} />
       <Route path="/pin" element={<VerificationCode />} />
+      <Route path="/" element={<Navbar />} />
+      <Route path="/footer" element={<Footer />} />
+      <Route path="/herosection" element={<HeroSection />} />
+
     </Routes>
     </>
   );

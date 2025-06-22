@@ -53,11 +53,8 @@ const createFurniture = async (req, res) => {
 // Get All Furniture
 const getAllFurniture = async (req, res) => {
   try {
-    const furnitureList = await Furniture.find()
-      .populate('category')
-      .populate('section')
-      .populate('returnPolicy');
-    res.json(furnitureList);
+    const furniture = await Furniture.find().populate("category section returnPolicy");
+    res.json(furniture);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -78,8 +75,6 @@ const getFurnitureById = async (req, res) => {
 };
 
 // Update Furniture
-
-
 const updateFurniture = async (req, res) => {
   try {
     const { id } = req.params;
@@ -118,8 +113,6 @@ const updateFurniture = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
-module.exports = { updateFurniture };
 
 
 // Delete Furniture
