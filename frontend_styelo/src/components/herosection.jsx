@@ -11,7 +11,7 @@ import circle3 from "../assets/circle3.jpg";
 
 const slides = [
   {
-    title: "3-in-1 Convertible Sofa Bed",
+    title: "3-in-1 Sofa bed",
     subtitle: "Stylish Comfort",
     sale: "LIMITED TIME OFFER",
     button: "Explore",
@@ -21,8 +21,8 @@ const slides = [
     bgColor: "#9B754F45",
   },
   {
-    title: "Living in Style",
-    subtitle: "Wood Table",
+    title: "Wood Book Shelf",
+    subtitle: "Book Shelf",
     sale: "SALE UP TO 40% OFF",
     button: "Shop Now",
     type: "image",
@@ -31,14 +31,14 @@ const slides = [
     bgColor: "#f5e7ce",
   },
   {
-    title: "Luxury Living",
-    subtitle: "Custom Pieces",
+    title: "Lifting Coffee Table",
+    subtitle: "Wood Table",
     sale: "NEW COLLECTION 2025",
     button: "View More",
     type: "video",
     media: video2,
     circle: circle3,
-    bgColor: "#9B754F4D",
+    bgColor: "#9B754F72",
   },
 ];
 
@@ -59,13 +59,14 @@ const HeroSection = () => {
     <section className="w-full h-[90vh] flex overflow-hidden font-['Poppins'] relative">
       {/* Left Section */}
       <div
-        className="w-1/2 flex flex-col justify-center pl-20 space-y-5 z-10"
+        key={index} // forces re-render for animation
+        className="w-1/2 flex flex-col justify-center pl-20 space-y-5 z-10 fade-in"
         style={{ backgroundColor: bgColor }}
       >
-        <p className="text-[#d97a00] font-medium text-sm">{subtitle}</p>
-        <h1 className="text-5xl font-bold leading-tight">{title}</h1>
+        <p className="text-[#d97a00] font-medium text-[19px]">{subtitle}</p>
+        <h1 className="text-[48px] font-bold leading-tight">{title}</h1>
         <p className="text-sm">{sale}</p>
-        <button className="bg-[#f7941d] text-white px-6 py-2 rounded-full font-semibold w-max hover:bg-[#e4830b] transition">
+        <button className="flip-button bg-[#421E93A1] text-white px-6 py-2 rounded-full font-semibold w-max hover:bg-[#e4830b] transition">
           {button}
         </button>
       </div>
