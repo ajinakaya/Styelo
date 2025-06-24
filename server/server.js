@@ -38,7 +38,7 @@ app.use('/section', require('./routes/sectionroutes'));
 app.use('/returnpolicy', require('./routes/returnpolicyroutes'));
 
 
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 

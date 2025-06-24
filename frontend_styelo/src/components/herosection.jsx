@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import "../styles/herosection.css";
 
 import video1 from "../assets/video1.mp4";
@@ -44,29 +45,54 @@ const slides = [
 
 const HeroSection = () => {
   const [index, setIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
+      if (!isHovered) {
+        setIndex((prev) => (prev + 1) % slides.length);
+      }
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isHovered]);
 
   const { title, subtitle, sale, button, type, media, circle, bgColor } =
     slides[index];
 
+  const nextSlide = () => {
+    setIndex((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (slideIndex) => {
+    setIndex(slideIndex);
+  };
+
   return (
-    <section className="w-full h-[90vh] flex overflow-hidden font-['Poppins'] relative">
-      {/* Left Section */}
+    <section 
+      className="w-full h-[107vh] flex overflow-hidden font-['Poppins'] relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Left Section  */}
       <div
-        key={index} // forces re-render for animation
-        className="w-1/2 flex flex-col justify-center pl-20 space-y-5 z-10 fade-in"
+        className="w-1/2 flex flex-col justify-center pl-20 space-y-5 z-10"
         style={{ backgroundColor: bgColor }}
       >
-        <p className="text-[#d97a00] font-medium text-[19px]">{subtitle}</p>
-        <h1 className="text-[48px] font-bold leading-tight">{title}</h1>
+        <p key={index + "-subtitle"} className="text-[#d97a00] font-medium text-[19px] fade-in-up">
+          {subtitle}
+        </p>
+        <h1 key={index + "-title"} className="text-[48px] font-bold leading-tight fade-in-up">
+          {title}
+        </h1>
         <p className="text-sm">{sale}</p>
-        <button className="flip-button bg-[#421E93A1] text-white px-6 py-2 rounded-full font-semibold w-max hover:bg-[#e4830b] transition">
+        <button
+          key={index + "-button"}
+          className="flip-button bg-[#421E93A1] text-white px-6 py-2 rounded-full font-semibold w-max hover:bg-[#e4830b] transition"
+        >
           {button}
         </button>
       </div>
@@ -101,6 +127,48 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+
+      {/* Navigation Buttons */}
+      <button
+        onClick={prevSlide}
+        className={`absolute left-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 ${
+          isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+        }`}
+      >
+        <ChevronLeft className="w-6 h-6 text-gray-700" />
+      </button>
+
+      <button
+        onClick={nextSlide}
+        className={`absolute right-8 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 ${
+          isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
+        }`}
+      >
+        <ChevronRight className="w-6 h-6 text-gray-700" />
+      </button>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="flex space-x-3">
+          {slides.map((slide, slideIndex) => (
+            <button
+              key={slideIndex}
+              onClick={() => goToSlide(slideIndex)}
+              className="group relative"
+            >
+              {/* Dot indicator */}
+              <div
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  index === slideIndex
+                    ? 'bg-[#d97a00] scale-125'
+                    : 'bg-white/60 hover:bg-white/80'
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
     </section>
   );
 };
