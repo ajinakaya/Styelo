@@ -38,7 +38,7 @@ const Navbar = () => {
       {!isHomePage && <div className="h-22"></div>}
       
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-['Poppins'] ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-poppins ${
           isHomePage 
             ? (isScrolled ? 'bg-white shadow-sm  border-gray-300' : 'bg-white/30 border-b border-black/28')
             : 'bg-white shadow-sm border-b border-gray-300'
@@ -61,7 +61,7 @@ const Navbar = () => {
                 <Link
                   key={name}
                   to={path}
-                  className={` text-[17px] font-semibold transition ${
+                  className={` text-[15px] font-medium transition ${
                     isActive(path)
                       ? "text-[#B88E2F]"
                       : `${

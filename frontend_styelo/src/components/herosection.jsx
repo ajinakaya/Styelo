@@ -73,7 +73,7 @@ const HeroSection = () => {
 
   return (
     <section 
-      className="w-full h-[107vh] flex overflow-hidden font-['Poppins'] relative"
+      className="w-full h-[107vh] flex overflow-hidden font-poppins relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -82,10 +82,10 @@ const HeroSection = () => {
         className="w-1/2 flex flex-col justify-center pl-20 space-y-5 z-10"
         style={{ backgroundColor: bgColor }}
       >
-        <p key={index + "-subtitle"} className="text-[#d97a00] font-medium text-[19px] fade-in-up">
+        <p key={index + "-subtitle"} className="text-[#d97a00] font-medium text-[15px] fade-in-up">
           {subtitle}
         </p>
-        <h1 key={index + "-title"} className="text-[48px] font-bold leading-tight fade-in-up">
+        <h1 key={index + "-title"} className="text-[45px] font-semibold leading-tight fade-in-up">
           {title}
         </h1>
         <p className="text-sm">{sale}</p>

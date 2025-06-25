@@ -61,7 +61,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-white overflow-hidden font-[Dosis] relative">
+    <div className="w-screen h-screen bg-white overflow-hidden font-Dosis relative">
       {/* Logo */}
       <div className="absolute top-6 left-10">
         <img src={logo} alt="Logo" className="h-24" />
