@@ -36,6 +36,8 @@ app.use('/furniture', require('./routes/furnitureroutes'));
 app.use('/category', require('./routes/categoryroutes'));
 app.use('/section', require('./routes/sectionroutes'));
 app.use('/returnpolicy', require('./routes/returnpolicyroutes'));
+app.use('/cart', require('./routes/cartroutes'));
+app.use('/wishlist', require('./routes/wishlistroutes'));
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

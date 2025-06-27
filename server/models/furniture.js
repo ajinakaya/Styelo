@@ -8,11 +8,22 @@ const furniture = new mongoose.Schema({
     type: String,  
     required: false,
   },
-  furnitureimages: [String],
-   color: {
-    type: [String],
-    required: false,
-  },
+  colorOptions: [
+    {
+      color: {
+        type: String,
+        required: true,
+      },
+      colorCode: {
+        type: String, 
+        required: false,
+      },
+      furnitureimages: {
+        type: [String], 
+        required: true,
+      }
+    }
+  ],
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",

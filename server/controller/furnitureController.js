@@ -8,7 +8,7 @@ const createFurniture = async (req, res) => {
       name,
       description,
       price,
-      color,
+      colorOptions,
       category,
       section,
       productOverview,
@@ -19,8 +19,23 @@ const createFurniture = async (req, res) => {
 
     // File fields
     const thumbnail = req.files?.thumbnail?.[0]?.path || null;
-    const furnitureimages = req.files?.furnitureimages?.map(file => file.path) || [];
     const productIconPaths = req.files?.productIcons?.map(file => file.path) || [];
+    const allFurnitureImages = req.files?.furnitureimages?.map(file => file.path) || [];
+
+    const parsedColorVariants = JSON.parse(colorOptions || "[]");
+   
+    const processedColorVariants = parsedColorVariants.map((variant, index) => {
+      const imagesPerVariant = Math.ceil(allFurnitureImages.length / parsedColorVariants.length);
+      const startIndex = index * imagesPerVariant;
+      const endIndex = startIndex + imagesPerVariant;
+      const variantImages = allFurnitureImages.slice(startIndex, endIndex);
+      
+      return {
+        color: variant.color,
+        colorCode: variant.colorCode || null,
+        furnitureimages: variantImages
+      };
+    });
 
     const parsedOverview = JSON.parse(productOverview || "[]").map((item, index) => ({
       label: item.label,
@@ -32,14 +47,13 @@ const createFurniture = async (req, res) => {
       description,
       price,
       thumbnail,
-      furnitureimages,
-      color: JSON.parse(color),
+      colorOptions: processedColorVariants, 
       category,
       section,
       productOverview: parsedOverview,
-      specifications: JSON.parse(specifications),
+      specifications: JSON.parse(specifications || "{}"),
       returnPolicy,
-      tags: JSON.parse(tags),
+      tags: JSON.parse(tags || "[]"),
     });
 
     await furniture.save();
@@ -49,6 +63,7 @@ const createFurniture = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Get All Furniture
 const getAllFurniture = async (req, res) => {

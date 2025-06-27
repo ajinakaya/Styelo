@@ -8,7 +8,11 @@ import ForgotPassword from "./pages/forgot passord";
 import SetNewPassword from "./pages/resetpassword";
 import VerificationCode from "./pages/pin";
 import Home from "./pages/homepage";
-import Footer from "./layout/footer";
+import AboutUs from "./pages/about";
+import ContactUs from "./pages/contact";
+import ProductDetails from "./pages/detailspage";
+import Search from "./components/search";
+import FurnitureFilter from "./pages/filter";
 
 
 axios.defaults.baseURL = "http://localhost:3001";
@@ -30,7 +34,12 @@ const App = () => {
       <Route path="/set-new-password" element={<SetNewPassword />} />
       <Route path="/pin" element={<VerificationCode />} />
       <Route path="/" element={<Home/>} />
-      <Route path="/footer" element={<Footer />} />
+      <Route path="/aboutus" element={<AboutUs />} />
+      <Route path="/contact" element={<ContactUs />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
+      <Route path="/search" element={<Search />} />
+      <Route path="/furniture" element={<FurnitureFilter />} />
+      
      
 
     </Routes>

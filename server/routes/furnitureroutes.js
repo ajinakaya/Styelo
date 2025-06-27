@@ -9,7 +9,7 @@ router.post(
   '/',
   upload.fields([
     { name: 'thumbnail', maxCount: 1 },
-    { name: 'furnitureimages', maxCount: 10 },
+    { name: 'furnitureimages', maxCount: 15 },
     { name: 'productIcons', maxCount: 10 },
   ]),
   furnitureController.createFurniture
@@ -29,8 +29,6 @@ router.put(
 router.delete('/:id', furnitureController.deleteFurniture);
 
 router.get('/all', furnitureController.getAllFurniture);
-
-
 
 router.get('/search', filterController.searchFurniture);
 
