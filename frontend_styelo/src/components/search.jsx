@@ -34,7 +34,7 @@ const Search = ({ onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#D9D9D960] flex justify-center items-start pt-16 px-4 md:px-0 font-poppins"
+      className="fixed inset-0 z-50 bg-[#D9D9D960] flex justify-center items-start pt-25 px-4 md:px-0 font-poppins"
       onClick={onClose}
     >
       <div
@@ -71,12 +71,15 @@ const Search = ({ onClose }) => {
         {/* Content Area */}
         <div className="px-6 pb-6">
           {!hasSearched ? (
-            // No recent searches state
-            <div className="bg-gray-50 rounded-xl p-8 min-h-[300px] flex flex-col items-center justify-center">
+            // No recent searches
+            <div className="bg-gray-50 border border-black/20 rounded-xl p-8 min-h-[300px] flex flex-col items-center justify-center">
               <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">
                 <FiSearch className="text-gray-400 text-xl" />
               </div>
-              <p className="text-gray-500 text-sm">No recent searches</p>
+             <h3 className="text-lg font-semibold text-gray-600 mb-2">Start your search</h3>
+              <p className="text-gray-500 text-sm text-center max-w-md">
+                Search for furniture by name or select a category to browse our collection
+              </p>
             </div>
           ) : (
             // Search results

@@ -3,12 +3,14 @@ import { useLocation, Link } from "react-router-dom";
 import {  Search as SearchIcon, User, Heart, ShoppingCart, Menu, X } from "lucide-react";
 import logo from "../assets/logo1.png";
 import Search from "../components/search"; 
+import CategoryContainer from "../components/categorycontainer";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-   const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showCategory, setShowCategory] = useState(false);
 
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
 
@@ -26,7 +28,7 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: "Furniture", path: "/furniture" },
+    { name: "Furniture", action: "category" },
     { name: "Decors", path: "/decors" },
     { name: "About", path: "/aboutus" },
     { name: "Contact", path: "/contact" },
@@ -58,25 +60,39 @@ const Navbar = () => {
               />
             </div>
 
-            {/* Navigation */}
+                 {/* Navigation Links */}
             <nav className="hidden md:flex space-x-16 absolute left-1/3 transform translate-x-8">
-              {navLinks.map(({ name, path }) => (
-                <Link
-                  key={name}
-                  to={path}
-                  className={`text-[15px] font-medium transition ${
-                    isActive(path)
-                      ? "text-[#B88E2F]"
-                      : `${
-                          isHomePage && !isScrolled
-                            ? "text-black/90"
-                            : "text-black/90"
-                        } hover:text-[#B88E2F]`
-                  }`}
-                >
-                  {name}
-                </Link>
-              ))}
+              {navLinks.map(({ name, path, action }) =>
+                action === "category" ? (
+                  <button
+                    key={name}
+                    onClick={() => setShowCategory(true)}
+                    className={`text-[15px] font-medium transition ${
+                      isHomePage && !isScrolled
+                        ? "text-black/90"
+                        : "text-black/90"
+                    } hover:text-[#B88E2F]`}
+                  >
+                    {name}
+                  </button>
+                ) : (
+                  <Link
+                    key={name}
+                    to={path}
+                    className={`text-[15px] font-medium transition ${
+                      isActive(path)
+                        ? "text-[#B88E2F]"
+                        : `${
+                            isHomePage && !isScrolled
+                              ? "text-black/90"
+                              : "text-black/90"
+                          } hover:text-[#B88E2F]`
+                    }`}
+                  >
+                    {name}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* Right Icons */}
@@ -111,41 +127,52 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Mobile Nav */}
+         {/* Mobile Nav */}
           {isMenuOpen && (
             <div
               className={`md:hidden mt-2 border-t pt-2 ${
                 isHomePage
                   ? isScrolled
                     ? "border-gray-300 bg-white"
-                    : "border-white/30 bg-white/25 "
+                    : "border-white/30 bg-white/25"
                   : "border-gray-300 bg-white"
               }`}
             >
-              {navLinks.map(({ name, path }) => (
-                <Link
-                  key={name}
-                  to={path}
-                  className={`block px-3 py-2 font-medium transition ${
-                    isActive(path)
-                      ? "text-[#B88E2F]"
-                      : `${
-                          isHomePage && !isScrolled
-                            ? "text-black"
-                            : "text-black"
-                        } hover:text-[#B88E2F]`
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {name}
-                </Link>
-              ))}
+              {navLinks.map(({ name, path, action }) =>
+                action === "category" ? (
+                  <button
+                    key={name}
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setShowCategory(true);
+                    }}
+                    className="block w-full text-left px-3 py-2 font-medium text-black hover:text-[#B88E2F]"
+                  >
+                    {name}
+                  </button>
+                ) : (
+                  <Link
+                    key={name}
+                    to={path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block px-3 py-2 font-medium transition ${
+                      isActive(path)
+                        ? "text-[#B88E2F]"
+                        : "text-black hover:text-[#B88E2F]"
+                    }`}
+                  >
+                    {name}
+                  </Link>
+                )
+              )}
             </div>
           )}
         </div>
       </header>
-      {/* Search Popup */}
+
+      {/* Popup Modals */}
       {showSearch && <Search onClose={() => setShowSearch(false)} />}
+      {showCategory && <CategoryContainer onClose={() => setShowCategory(false)} />}
     </>
   );
 };

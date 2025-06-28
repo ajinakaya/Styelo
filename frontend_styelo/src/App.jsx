@@ -11,8 +11,8 @@ import Home from "./pages/homepage";
 import AboutUs from "./pages/about";
 import ContactUs from "./pages/contact";
 import ProductDetails from "./pages/detailspage";
-import Search from "./components/search";
 import FurnitureFilter from "./pages/filter";
+
 
 
 axios.defaults.baseURL = "http://localhost:3001";
@@ -37,8 +37,9 @@ const App = () => {
       <Route path="/aboutus" element={<AboutUs />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/product/:id" element={<ProductDetails />} />
-      <Route path="/search" element={<Search />} />
       <Route path="/furniture" element={<FurnitureFilter />} />
+      
+
       
      
 
