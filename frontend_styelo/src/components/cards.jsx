@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
+import { useWishlist } from "../context/wishlistcontext";
+import { useCart } from "../context/cartcontext";
+
 
 const Productcards = ({ headline, subheading, products }) => {
   const [visibleProducts, setVisibleProducts] = useState(10);
+    const { addToWishlist, wishlistItems } = useWishlist();
+      const { addToCart } = useCart();
 
   const handleSeeMore = () => {
     setVisibleProducts((prevVisible) => prevVisible + 10);
@@ -14,15 +19,25 @@ const Productcards = ({ headline, subheading, products }) => {
     return <p>Error: Invalid product data.</p>;
   }
 
+  const handleWishlistClick = async (e, productId) => {
+    e.preventDefault(); 
+    try {
+      await addToWishlist(productId); 
+    } catch (err) {
+      console.error("Failed to add to wishlist:", err);
+    }
+  };
+
+  const isInWishlist = (productId) =>
+    wishlistItems?.some((item) => item.furniture._id === productId);
+
   return (
     <div className="max-w-9xl mx-auto px-15 py-9 font-poppins">
       {/* Header Section */}
       <div className="text-center mb-9">
         <h2 className="text-[33px] font-medium text-black mb-0">{headline}</h2>
         {subheading && (
-          <p className=" text-[16px] text-black/48 font-Regular">
-            {subheading}
-          </p>
+          <p className="text-[16px] text-black/48 font-Regular">{subheading}</p>
         )}
       </div>
 
@@ -31,12 +46,12 @@ const Productcards = ({ headline, subheading, products }) => {
           {/* Products */}
           {Array.isArray(products) && products.length > 0 ? (
             products.slice(0, visibleProducts).map((product) => (
-              <div
+              <Link
+                to={`/product/${product._id}`}
                 key={product._id}
                 className="bg-white border border-black/20 hover:border-black/30 transition-all duration-300 overflow-hidden group relative rounded-[10px] flex-shrink-0"
                 style={{ width: "440px", height: "245px" }}
               >
-                {/* Card Content  */}
                 <div className="flex h-full">
                   {/* Product Image */}
                   <div
@@ -63,7 +78,7 @@ const Productcards = ({ headline, subheading, products }) => {
                       <p className="text-[16px] text-black/62 mb-1 font-medium">
                         Size:{" "}
                         <span className="text-black/62">
-                          {product.specifications.dimensions.overall}
+                          {product.specifications?.dimensions?.overall}
                         </span>
                       </p>
 
@@ -73,16 +88,14 @@ const Productcards = ({ headline, subheading, products }) => {
                           Colors:
                         </p>
                         <div className="flex gap-3 pl-4">
-                          {product.colorOptions
-                            ?.slice(0, 4)
-                            .map((option, index) => (
-                              <div
-                                key={index}
-                                className="w-6 h-6 rounded-full border-2 border-white hover:scale-110 transition-transform cursor-pointer"
-                                style={{ backgroundColor: option.colorCode }}
-                                title={option.color}
-                              />
-                            ))}
+                          {product.colorOptions?.slice(0, 4).map((option, index) => (
+                            <div
+                              key={index}
+                              className="w-6 h-6 rounded-full border-2 border-white hover:scale-110 transition-transform cursor-pointer"
+                              style={{ backgroundColor: option.colorCode }}
+                              title={option.color}
+                            />
+                          ))}
                         </div>
                       </div>
 
@@ -92,9 +105,17 @@ const Productcards = ({ headline, subheading, products }) => {
                       </p>
                     </div>
 
-                    {/* Add to Cart Button */}
+                     {/* Add to Cart Button */}
                     <div className="flex justify-center">
                       <button
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            await addToCart(product._id, 1); 
+                          } catch (err) {
+                            console.error("Add to cart failed", err);
+                          }
+                        }}
                         className="bg-black/76 text-white hover:bg-black/70 transition-all duration-200 font-medium text-[13px] rounded-lg px-4 py-2 flex items-center justify-center"
                         style={{ width: "109px", height: "32px" }}
                       >
@@ -102,12 +123,22 @@ const Productcards = ({ headline, subheading, products }) => {
                       </button>
                     </div>
                   </div>
-                  {/* Wishlist Icon */}
-                  <button className="absolute bottom-0 right-1 p-2 bg-white/90 rounded-full hover:bg-white transition-colors z-10 group-hover:scale-110">
-                    <Heart className="w-5 h-5 text-black/30 hover:text-red-500 hover:fill-current transition-colors" />
+
+               {/* Wishlist Icon */}
+                <button
+                  onClick={(e) => handleWishlistClick(e, product._id)}
+                  className="absolute bottom-0 right-1 p-2 bg-white/90 rounded-full hover:bg-white transition-colors z-10 group-hover:scale-110"
+                >
+                  <Heart
+                    className={`w-5 h-5 transition-colors ${
+                      isInWishlist(product._id)
+                        ? "text-red-500 fill-current"
+                        : "text-black/30"
+                    }`}
+                  />
                   </button>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="w-full text-center py-12">

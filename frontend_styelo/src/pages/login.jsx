@@ -44,11 +44,13 @@ const SignInPage = () => {
     try {
       setIsSubmitting(true);
       const response = await axios.post("/login", formValues);
+      console.log("Login response:", response.data);
       const { token } = response.data;
       localStorage.setItem("authToken", token);
 
       const decoded = jwtDecode(token);
       const role = decoded.role;
+      console.log("Decoded User role:", role); 
 
       toast.success("Login successful!");
 

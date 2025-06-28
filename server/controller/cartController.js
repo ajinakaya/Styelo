@@ -19,7 +19,9 @@ const addToCart = async (req, res) => {
     }
 
     await cart.save();
-    res.status(200).json(cart);
+
+    const populatedCart = await Cart.findOne({ user: userId }).populate('items.furniture');
+    res.status(200).json(populatedCart);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -45,7 +47,9 @@ const removeFromCart = async (req, res) => {
     cart.items = cart.items.filter(item => item.furniture.toString() !== furnitureId);
     await cart.save();
 
-    res.status(200).json(cart);
+    
+    const populatedCart = await Cart.findOne({ user: req.user._id }).populate('items.furniture');
+    res.status(200).json(populatedCart);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

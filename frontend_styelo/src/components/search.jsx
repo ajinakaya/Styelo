@@ -92,7 +92,7 @@ const Search = ({ onClose }) => {
                 results.map((item) => (
                   <div 
                     key={item._id} 
-                    className="bg-white border border-gray-200 rounded-2xl p-4  transition-shadow cursor-pointer"
+                    className="bg-white border border-black/20 rounded-2xl p-4  transition-shadow cursor-pointer"
                   >
                     <div className="flex items-start gap-4">
                       {/* Product Image */}

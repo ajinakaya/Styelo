@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import {  Search as SearchIcon, User, Heart, ShoppingCart, Menu, X } from "lucide-react";
+import {Search as SearchIcon,User,Heart,ShoppingCart,Menu,X,} from "lucide-react";
 import logo from "../assets/logo1.png";
-import Search from "../components/search"; 
+import Search from "../components/search";
 import CategoryContainer from "../components/categorycontainer";
 
 const Navbar = () => {
@@ -53,14 +53,16 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-22 relative">
             {/* Left: Logo */}
             <div className="flex items-center">
-              <img
-                src={logo}
-                alt="Styelo Logo"
-                className="h-23 object-contain relative left-[-10px]"
-              />
+              <Link to="/" className="flex items-center">
+                <img
+                  src={logo}
+                  alt="Styelo Logo"
+                  className="h-23 object-contain relative left-[-10px]"
+                />
+              </Link>
             </div>
 
-                 {/* Navigation Links */}
+            {/* Navigation Links */}
             <nav className="hidden md:flex space-x-16 absolute left-1/3 transform translate-x-8">
               {navLinks.map(({ name, path, action }) =>
                 action === "category" ? (
@@ -101,7 +103,7 @@ const Navbar = () => {
                 <User className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
               </Link>
 
-               <button onClick={() => setShowSearch(true)}>
+              <button onClick={() => setShowSearch(true)}>
                 <SearchIcon className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
               </button>
 
@@ -127,7 +129,7 @@ const Navbar = () => {
             </div>
           </div>
 
-         {/* Mobile Nav */}
+          {/* Mobile Nav */}
           {isMenuOpen && (
             <div
               className={`md:hidden mt-2 border-t pt-2 ${
@@ -172,7 +174,9 @@ const Navbar = () => {
 
       {/* Popup Modals */}
       {showSearch && <Search onClose={() => setShowSearch(false)} />}
-      {showCategory && <CategoryContainer onClose={() => setShowCategory(false)} />}
+      {showCategory && (
+        <CategoryContainer onClose={() => setShowCategory(false)} />
+      )}
     </>
   );
 };

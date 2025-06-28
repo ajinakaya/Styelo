@@ -12,6 +12,8 @@ import AboutUs from "./pages/about";
 import ContactUs from "./pages/contact";
 import ProductDetails from "./pages/detailspage";
 import FurnitureFilter from "./pages/filter";
+import Wishlist from "./pages/wishlist";
+import Cart from "./pages/cart";
 
 
 
@@ -38,6 +40,10 @@ const App = () => {
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/furniture" element={<FurnitureFilter />} />
+      <Route path="/wishlist" element={<Wishlist />} />
+      <Route path="/cart" element={<Cart />} />
+      
+
       
 
       

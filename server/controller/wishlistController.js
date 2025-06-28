@@ -17,7 +17,11 @@ const addToWishlist = async (req, res) => {
     }
 
     await wishlist.save();
-    res.status(200).json(wishlist);
+
+
+    const populatedWishlist = await Wishlist.findOne({ user: userId }).populate('items.furniture');
+
+    res.status(200).json(populatedWishlist);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -43,7 +47,10 @@ const removeFromWishlist = async (req, res) => {
     wishlist.items = wishlist.items.filter(item => item.furniture.toString() !== furnitureId);
     await wishlist.save();
 
-    res.status(200).json(wishlist);
+   
+    const populatedWishlist = await Wishlist.findOne({ user: req.user._id }).populate('items.furniture');
+
+    res.status(200).json(populatedWishlist);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
