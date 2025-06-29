@@ -14,6 +14,7 @@ import ProductDetails from "./pages/detailspage";
 import FurnitureFilter from "./pages/filter";
 import Wishlist from "./pages/wishlist";
 import Cart from "./pages/cart";
+import Checkout from "./pages/checkout";
 
 
 
@@ -42,6 +43,7 @@ const App = () => {
       <Route path="/furniture" element={<FurnitureFilter />} />
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
       
 
       

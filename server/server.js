@@ -38,6 +38,8 @@ app.use('/section', require('./routes/sectionroutes'));
 app.use('/returnpolicy', require('./routes/returnpolicyroutes'));
 app.use('/cart', require('./routes/cartroutes'));
 app.use('/wishlist', require('./routes/wishlistroutes'));
+app.use('/shippingrate', require('./routes/shippingroutes'));
+app.use('/order', require('./routes/orderroutes'));
 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
