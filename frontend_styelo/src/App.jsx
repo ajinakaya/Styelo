@@ -18,6 +18,7 @@ import Checkout from "./pages/checkout";
 import PaymentUI from "./pages/payment";
 import OrderConfirmation from "./pages/orderconfirmation";
 import MyOrders from "./pages/myorder";
+import RoomDesigner3D from "./pages/room";
 
 
 
@@ -50,6 +51,8 @@ const App = () => {
       <Route path="/payment" element={<PaymentUI />} />
       <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
       <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/room-designer" element={<RoomDesigner3D />} />
+      {/* Add more routes as needed */}
    
       
 
