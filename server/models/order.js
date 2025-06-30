@@ -31,15 +31,14 @@ const OrderSchema = new mongoose.Schema({
       }
     }
   ],
-
-  // Shipping method (referenced)
+  // Shipping method
   shippingMethod: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ShippingRate",
     required: true
   },
 
-  // Shipping address fields (flattened)
+  // Shipping address 
   shippingAddress: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -70,7 +69,7 @@ const OrderSchema = new mongoose.Schema({
 
   // Pricing
   subtotal: { type: Number, required: true },
-  shippingCost: { type: Number, default: 0 }, // Can be copied from ShippingRate on save
+  shippingCost: { type: Number, default: 0 }, 
   total: { type: Number, required: true },
 
   // Order Status

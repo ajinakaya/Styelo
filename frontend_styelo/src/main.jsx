@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { AuthProvider } from "./context/authconetxt.jsx";
 import { WishlistProvider } from "./context/wishlistcontext.jsx";
 import { CartProvider } from "./context/cartcontext.jsx";
+import { OrderProvider } from "./context/ordercontext.jsx";
 import "./index.css";
 
 createRoot(document.getElementById("root")).render(
@@ -11,7 +12,10 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <WishlistProvider>
         <CartProvider>
+          <OrderProvider>
+
         <App />
+          </OrderProvider>
         </CartProvider>
       </WishlistProvider>
     </AuthProvider>

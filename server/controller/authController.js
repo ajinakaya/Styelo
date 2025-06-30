@@ -87,7 +87,7 @@ const loginUser = async (req, res) => {
         if (isPasswordMatch) {
             // Generate token
             const token = jwt.sign({ _id: user._id,role: user.role }, process.env.SECRET_KEY, {
-                expiresIn: '1h', 
+                expiresIn: '24h', 
             });
             console.log('Generated Token:', token, 'role:',user.role);
 

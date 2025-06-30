@@ -15,6 +15,9 @@ import FurnitureFilter from "./pages/filter";
 import Wishlist from "./pages/wishlist";
 import Cart from "./pages/cart";
 import Checkout from "./pages/checkout";
+import PaymentUI from "./pages/payment";
+import OrderConfirmation from "./pages/orderconfirmation";
+import MyOrders from "./pages/myorder";
 
 
 
@@ -44,6 +47,10 @@ const App = () => {
       <Route path="/wishlist" element={<Wishlist />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="/payment" element={<PaymentUI />} />
+      <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+   
       
 
       

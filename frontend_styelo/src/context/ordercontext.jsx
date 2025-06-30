@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect,useCallback  } from "react";
 import { useAuth } from "./authconetxt";
 
 const OrderContext = createContext();
@@ -13,7 +13,8 @@ export const OrderProvider = ({ children }) => {
 
   // Fetch all user orders
   const fetchOrders = async () => {
-    setLoading(true);
+    if (!authToken) return;
+     
     setError(null);
     try {
       const res = await axios.get("http://localhost:3001/order/user", {
@@ -28,6 +29,8 @@ export const OrderProvider = ({ children }) => {
     }
   };
 
+
+
   // Create new order
   const createOrder = async (orderData) => {
     try {
@@ -35,7 +38,7 @@ export const OrderProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       setCurrentOrder(res.data);
-      fetchOrders(); // Refresh order list after creating new order
+      fetchOrders(); 
       return res.data;
     } catch (err) {
       console.error("Create order failed:", err);
@@ -69,6 +72,10 @@ export const OrderProvider = ({ children }) => {
       setError("Failed to fetch order.");
     }
   };
+
+    useEffect(() => {
+    fetchOrders();
+  }, [authToken]);
 
   return (
     <OrderContext.Provider
