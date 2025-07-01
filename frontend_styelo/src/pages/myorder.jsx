@@ -111,8 +111,8 @@ const MyOrders = () => {
                 className={`bg-white/ rounded-xl shadow-sm border-l-4 ${getStatusColor(order.status)} overflow-hidden`}
               >
                 <div 
-                  className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => navigate(`/order-confirmation/${order.orderNumber}`)}
+                  className="p-6 cursor-pointer transition-colors"
+                  
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1 mb-4 lg:mb-0">
@@ -174,8 +174,11 @@ const MyOrders = () => {
                           )}
                         </button>
                       )}
-                      <button className="px-4 py-2 bg-black/70 text-white rounded-lg hover:bg-black/80 transition-colors font-medium">
+                      <button className="px-4 py-2 bg-black/70 text-white rounded-lg hover:bg-black/75 transition-colors font-medium"
+                      onClick={() => navigate(`/order-confirmation/${order.orderNumber}`)}
+                      >
                         View Details
+                        
                       </button>
                     </div>
                   </div>

@@ -4,13 +4,13 @@ import { useOrder } from "../context/ordercontext";
 import Navbar from "../layout/navbar";
 
 const OrderConfirmation = () => {
-  const { orderNumber } = useParams(); // Changed from orderId to id to match the route parameter
+  const { orderNumber } = useParams();
   const navigate = useNavigate();
   const { currentOrder, loading, error, getOrderDetails } = useOrder();
 
   useEffect(() => {
     if (orderNumber) {
-      getOrderDetails(orderNumber); // This should be the orderNumber
+      getOrderDetails(orderNumber);
     }
   }, [orderNumber, getOrderDetails]);
 
@@ -18,7 +18,7 @@ const OrderConfirmation = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-white flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
             <p className="text-gray-600">Loading order details...</p>
@@ -32,7 +32,7 @@ const OrderConfirmation = () => {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center ">
+        <div className="min-h-screen bg-white flex items-center justify-center ">
           <div className="text-center">
             <p className="text-red-600 mb-4">{error || "Order not found"}</p>
             <button
@@ -47,7 +47,6 @@ const OrderConfirmation = () => {
     );
   }
 
-  // Assuming currentOrder contains the order data directly
   const order = currentOrder.order || currentOrder;
   const customer = currentOrder.customer || order.customer;
 
@@ -58,24 +57,23 @@ const OrderConfirmation = () => {
         <div className="max-w-4xl mx-auto px-4 py-12 font-poppins">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <h1 className="text-[32px] font-semiblod text-black/90 mb-4">
               THANKS FOR YOUR ORDER !
             </h1>
-            <p className="text-gray-600 text-lg">
-              Hi {customer?.firstName || "Customer"}, we're getting your order
-              to be shipped ! We will notify when it has been sent.
+            <p className="text-black/60 text-lg font-Regular">
+              Hi {order.shippingAddress?.firstName || "Customer"}, we're getting
+              your order to be shipped ! We will notify when it has been sent.
             </p>
-            {/* Display Order Number */}
-            <p className="text-gray-500 text-sm mt-2">
+            <p className="text-gray-500 text-sm mt-2  font-Regular">
               Order Number: {order.orderNumber || id}
             </p>
           </div>
 
           {/* Order Summary Card */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden max-w-2xl mx-auto">
+          <div className="bg-white rounded-lg  border border-black/32 overflow-hidden max-w-2xl mx-auto">
             {/* Header */}
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-center">
+            <div className="bg-white px-6 py-4 border-b border-gray-300">
+              <h2 className="text-[24px] font-medium text-center">
                 ORDER SUMMARY
               </h2>
             </div>
@@ -86,12 +84,9 @@ const OrderConfirmation = () => {
                 {order.cartItems &&
                   order.cartItems.map((item, index) => (
                     <div key={index} className="flex items-start space-x-4">
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                         <img
-                          src={
-                            item.furniture?.thumbnail ||
-                            "/api/placeholder/64/64"
-                          }
+                          src={`http://localhost:3001/${item.furniture.thumbnail}`}
                           alt={item.furniture?.name || "Product"}
                           className="w-full h-full object-cover"
                         />
@@ -101,11 +96,20 @@ const OrderConfirmation = () => {
                           {item.furniture?.name || "Product Name"}
                         </h3>
                         <p className="text-sm text-gray-600 mb-1">
-                          Size: {item.furniture?.dimensions || "Standard"}
+                          Size:{" "}
+                          {item.furniture.specifications?.dimensions?.overall ||
+                            "N/A"}
                         </p>
                         <div className="flex items-center space-x-2">
                           <span className="text-sm text-gray-600">Colors:</span>
-                          <div className="w-4 h-4 bg-amber-600 rounded-full border border-gray-300"></div>
+                          <div
+                            className="w-4 h-4  rounded-full border border-gray-300"
+                            style={{
+                              backgroundColor:
+                                item.furniture.colorOptions?.[0]?.colorCode ||
+                                "#000",
+                            }}
+                          ></div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -123,7 +127,7 @@ const OrderConfirmation = () => {
               </div>
 
               {/* Totals */}
-              <div className="border-t border-gray-200 pt-4 space-y-2">
+              <div className="border-t border-gray-300 pt-4 space-y-2">
                 <div className="flex justify-between text-gray-700">
                   <span>Sub Total</span>
                   <span>
@@ -140,14 +144,14 @@ const OrderConfirmation = () => {
                     Rs. {order.shippingCost?.toLocaleString() || "100"}
                   </span>
                 </div>
-                <div className="flex justify-between text-lg font-semibold text-gray-900 pt-2 border-t border-gray-200">
+                <div className="flex justify-between text-lg font-semibold text-gray-900 pt-2 ">
                   <span>Total</span>
                   <span>Rs. {order.total?.toLocaleString() || "0"}</span>
                 </div>
               </div>
 
               {/* Details Section */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-4 pt-6 border-t border-gray-300">
                 <h3 className="font-semibold text-gray-900 mb-4">Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
@@ -159,7 +163,7 @@ const OrderConfirmation = () => {
                   <div>
                     <p className="text-gray-600">
                       <span className="font-medium">Shipping Method:</span>{" "}
-                      {order.shippingMethod || "Standard Delivery"}
+                      {order.shippingMethod?.method || "Standard Delivery"}
                     </p>
                   </div>
                   <div className="md:col-span-2">
@@ -174,7 +178,7 @@ const OrderConfirmation = () => {
               </div>
 
               {/* Payment Section */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="mt-6 pt-6 border-t border-gray-300">
                 <h3 className="font-semibold text-gray-900 mb-4">Payment</h3>
                 <div className="text-sm">
                   <p className="text-gray-600 mb-1">
@@ -224,7 +228,7 @@ const OrderConfirmation = () => {
           <div className="text-center mt-8 space-x-4">
             <button
               onClick={() => navigate("/my-orders")}
-              className="bg-black text-white px-8 py-3 rounded-md hover:bg-gray-800 transition-colors font-medium"
+              className="bg-black/80 text-white px-8 py-3 rounded-md hover:bg-black/90 transition-colors font-medium"
             >
               View All Orders
             </button>
@@ -236,8 +240,7 @@ const OrderConfirmation = () => {
             </button>
           </div>
 
-          {/* Additional Info for Bank Transfer */}
-        {order.payment?.method === "DIRECT_BANK_TRANSFER" &&
+          {order.payment?.method === "DIRECT_BANK_TRANSFER" &&
             order.payment?.status === "PENDING" && (
               <div className="mt-8 max-w-2xl mx-auto">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">

@@ -38,7 +38,7 @@ const Checkout = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
+
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -79,7 +79,6 @@ const Checkout = () => {
       return;
     }
 
-    // Navigate to payment page with data
     navigate('/payment', {
       state: {
         selectedShipping,
@@ -242,7 +241,6 @@ const Checkout = () => {
           {/* Right: Order Summary */}
           <div className="border p-6 rounded shadow-sm h-fit">
             <h3 className="text-center text-lg font-semibold mb-4">ORDER SUMMARY</h3>
-            
             {cart.map((item, i) => (
               <div className="border-b pb-4 mb-4 flex gap-4 items-start" key={i}>
                 <img 
@@ -259,7 +257,8 @@ const Checkout = () => {
                   Rs. {(item.furniture.price * item.quantity).toLocaleString()}
                 </p>
               </div>
-            ))}
+            ))}
+           
 
             <div className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between">
