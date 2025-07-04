@@ -10,12 +10,12 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch cart on login
+  
   useEffect(() => {
     if (authToken) fetchCart();
   }, [authToken]);
 
-  // Fetch cart items
+  
   const fetchCart = async () => {
     setLoading(true);
     setError(null);

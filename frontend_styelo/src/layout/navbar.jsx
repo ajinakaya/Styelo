@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import {Search as SearchIcon,User,Heart,ShoppingCart,Menu,X,} from "lucide-react";
+import {
+  Search as SearchIcon,
+  User,
+  Heart,
+  ShoppingCart,
+  Menu,
+  X,
+} from "lucide-react";
 import logo from "../assets/logo1.png";
 import Search from "../components/search";
 import CategoryContainer from "../components/categorycontainer";
+import { useCart } from "../context/cartcontext";
+import { useWishlist } from "../context/wishlistcontext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,6 +20,11 @@ const Navbar = () => {
   const location = useLocation();
   const [showSearch, setShowSearch] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
+  const { cart } = useCart();
+  const { wishlist } = useWishlist();
+
+  const cartCount = cart?.length || 0;
+  const wishlistCount = wishlist?.length || 0;
 
   const isHomePage = location.pathname === "/" || location.pathname === "/home";
 
@@ -106,14 +120,28 @@ const Navbar = () => {
               <button onClick={() => setShowSearch(true)}>
                 <SearchIcon className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
               </button>
+              {/* Wishlist Icon with Count Badge */}
+              <div className="relative">
+                <Link to="/wishlist">
+                  <Heart className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -bottom-1 -right-2 bg-[#B88E2F] text-white text-[9px] font-medium w-4 h-4 flex items-center justify-center rounded-full">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
 
-              <Link to="/wishlist">
-                <Heart className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
-              </Link>
-
-              <Link to="/cart">
-                <ShoppingCart className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
-              </Link>
+              <div className="relative">
+                <Link to="/cart">
+                  <ShoppingCart className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
+                  {cartCount > 0 && (
+                    <span className="absolute -bottom-1 -right-2 bg-[#B88E2F] text-white text-[9px] font-medium w-4 h-4 flex items-center justify-center rounded-full">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+              </div>
 
               {/* Mobile Toggle */}
               <button

@@ -1,15 +1,25 @@
 import React from "react";
 import Navbar from "../layout/navbar";
 import { useCart } from "../context/cartcontext";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, loading, error, removeFromCart, addToCart } = useCart();
+  const navigate = useNavigate();
 
   const calculateTotal = () => {
     return cart.reduce(
       (sum, item) => sum + item.furniture.price * item.quantity,
       0
     );
+  };
+
+   const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert("Your cart is empty");
+      return;
+    }
+    navigate("/checkout");
   };
 
   if (loading) return <div className="text-center py-20">Loading cart...</div>;
@@ -28,8 +38,8 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto p-6 font-poppins">
-        <h1 className="text-3xl font-semibold mb-8 text-center">Cart</h1>
+      <div className="max-w-7xl mx-auto p-10 font-poppins">
+        <h1 className="text-3xl font-medium mb-8 text-center">Cart</h1>
 
         <div className="grid grid-cols-4 font-semibold text-sm border-b border-gray-300 py-2 text-center text-white bg-[#C69C6D] rounded">
           <div>PRODUCT</div>
@@ -62,7 +72,7 @@ const Cart = () => {
                   }}
                 ></div>
                 <p className="text-sm text-gray-600">
-                  Size: {item.furniture.size || "N/A"}
+                  Size: {item.furniture.specifications?.dimensions?.overall}
                 </p>
                 <button className="text-xs text-gray-500 mt-1 mr-2">
                   Edit
@@ -116,7 +126,9 @@ const Cart = () => {
               <span>Total</span>
               <span>Rs:{calculateTotal().toLocaleString()}</span>
             </div>
-            <button className="bg-black text-white w-full py-2 rounded">
+            <button 
+            onClick={handleCheckout}
+            className="bg-black/80 text-white w-full py-2 rounded">
               Check Out
             </button>
           </div>
