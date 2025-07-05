@@ -60,6 +60,17 @@ export const WishlistProvider = ({ children }) => {
       setError("Failed to remove item from wishlist.");
     }
   };
+    const toggleWishlist = async (furnitureId) => {
+    const isWishlisted = wishlist.some(
+      (item) =>
+        item.furniture?._id === furnitureId || item._id === furnitureId
+    );
+    if (isWishlisted) {
+      await removeFromWishlist(furnitureId);
+    } else {
+      await addToWishlist(furnitureId);
+    }
+  }
 
   return (
     <WishlistContext.Provider
@@ -70,6 +81,7 @@ export const WishlistProvider = ({ children }) => {
         addToWishlist,
         removeFromWishlist,
         fetchWishlist,
+        toggleWishlist
       }}
     >
       {children}
