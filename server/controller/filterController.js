@@ -1,6 +1,6 @@
 const Furniture = require("../models/furniture");
 const Category = require("../models/category");
-const Section = require("../models/section");
+const Section = require("../models/sector");
 
 const searchFurniture = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ const sectionMatches = await Section.find({
       ],
     })
       .populate("category")
-      .populate("section")
+      .populate("sector")
       .populate("returnPolicy");
 
     res.status(200).json(results);
@@ -41,7 +41,7 @@ const filterFurniture = async (req, res) => {
       color,
       tag,
       category,
-      section,
+      sector,
       sortBy,
       sortOrder = "asc",
     } = req.query;
@@ -59,14 +59,14 @@ const filterFurniture = async (req, res) => {
 
     if (tag) filter.tags = tag;
     if (category) filter.category = category;
-    if (section) filter.section = section;
+    if (sector) filter.sector = sector;
 
     const sortOptions = {};
     if (sortBy) sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
 
     const filtered = await Furniture.find(filter)
       .populate("category")
-      .populate("section")
+      .populate("sector")
       .populate("returnPolicy")
       .sort(sortOptions);
 
@@ -82,7 +82,7 @@ const getFurnitureByTag = async (req, res) => {
 
     const furniture = await Furniture.find({ tags: tagName })
       .populate("category")
-      .populate("section")
+      .populate("sector")
       .populate("returnPolicy");
 
     res.status(200).json(furniture);

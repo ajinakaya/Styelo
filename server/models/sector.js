@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
-const SectionSchema = new mongoose.Schema(
+const SectorSchema = new mongoose.Schema(
   {
-    section: {
+    sector: {
       type: String,
       required: true,
-      unique: true,
+      
     },
      category: {
           type: mongoose.Schema.Types.ObjectId,
@@ -17,4 +17,4 @@ const SectionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Section", SectionSchema);
+module.exports = mongoose.model("Sector", SectorSchema);

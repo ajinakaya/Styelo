@@ -29,9 +29,9 @@ const furniture = new mongoose.Schema({
     ref: "Category",
     required: true,
   },
-  section: {
+  sector: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Section",
+    ref: "Sector",
     required: true,
   },
   productOverview: [

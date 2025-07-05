@@ -1,15 +1,14 @@
-const Section = require('../models/section');
+const Section = require('../models/sector');
 
 const createSection = async (req, res) => {
-  try {
-    const section = new Section(req.body); 
-    await section.save();
-    res.status(201).json(section); 
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
+   try {
+     const section = new Section(req.body); 
+     await section.save();
+     res.status(201).json(section); 
+   } catch (error) {
+     res.status(400).json({ error: error.message });
+   }
+ };
 
 const getAllSections = async (req, res) => {
   try {

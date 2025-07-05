@@ -10,7 +10,7 @@ const createFurniture = async (req, res) => {
       price,
       colorOptions,
       category,
-      section,
+      sector,
       productOverview,
       specifications,
       returnPolicy,
@@ -49,7 +49,7 @@ const createFurniture = async (req, res) => {
       thumbnail,
       colorOptions: processedColorVariants, 
       category,
-      section,
+      sector,
       productOverview: parsedOverview,
       specifications: JSON.parse(specifications || "{}"),
       returnPolicy,
@@ -68,7 +68,7 @@ const createFurniture = async (req, res) => {
 // Get All Furniture
 const getAllFurniture = async (req, res) => {
   try {
-    const furniture = await Furniture.find().populate("category section returnPolicy");
+    const furniture = await Furniture.find().populate("category sector returnPolicy");
     res.json(furniture);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -80,7 +80,7 @@ const getFurnitureById = async (req, res) => {
   try {
     const furniture = await Furniture.findById(req.params.id)
       .populate('category')
-      .populate('section')
+      .populate('sector')
       .populate('returnPolicy');
     if (!furniture) return res.status(404).json({ message: 'Furniture not found' });
     res.json(furniture);
@@ -98,7 +98,7 @@ const updateFurniture = async (req, res) => {
 
     const data = req.body;
 
-    for (let field of ["name", "description", "price", "category", "section", "returnPolicy"]) {
+    for (let field of ["name", "description", "price", "category", "sector", "returnPolicy"]) {
       if (data[field]) existing[field] = data[field];
     }
 
