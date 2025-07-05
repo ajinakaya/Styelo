@@ -19,6 +19,25 @@ const Productcards = ({ headline, subheading, products }) => {
       (item) => item.furniture?._id === productId || item._id === productId
     );
 
+  const handleWishlistToggle = (e, productId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const wasInWishlist = isInWishlist(productId);
+    
+    try {
+      toggleWishlist(productId);
+      
+      if (wasInWishlist) {
+        toast.info("Removed from wishlist");
+      } else {
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      console.error("Wishlist toggle failed", error);
+      toast.error("Failed to update wishlist");
+    }
+  };
+
   return (
     <div className="max-w-9xl mx-auto px-15 py-9 font-poppins">
       <div className="text-center mb-9">
@@ -32,9 +51,10 @@ const Productcards = ({ headline, subheading, products }) => {
         <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
           {Array.isArray(products) && products.length > 0 ? (
             products.slice(0, visibleProducts).map((product) => (
-              <div
+              <Link
                 key={product._id}
-                className="bg-white border border-black/20 hover:border-black/30 transition-all duration-300 overflow-hidden group relative rounded-[10px] flex-shrink-0"
+                to={`/product/${product._id}`}
+                className="bg-white border border-black/20 hover:border-black/30 transition-all duration-300 overflow-hidden group relative rounded-[10px] flex-shrink-0 cursor-pointer"
                 style={{ width: "440px", height: "245px" }}
               >
                 <div className="flex h-full">
@@ -52,11 +72,9 @@ const Productcards = ({ headline, subheading, products }) => {
 
                   <div className="flex-1 pl-1 p-6 flex flex-col justify-between">
                     <div>
-                      <Link to={`/product/${product._id}`}>
-                        <h3 className="font-semibold text-[23px] text-gray-900 mb-1 leading-tight hover:underline">
-                          {product.name}
-                        </h3>
-                      </Link>
+                      <h3 className="font-semibold text-[23px] text-gray-900 mb-1 leading-tight ">
+                        {product.name}
+                      </h3>
 
                       <p className="text-[16px] text-black/62 mb-1 font-medium">
                         Size:{" "}
@@ -92,6 +110,7 @@ const Productcards = ({ headline, subheading, products }) => {
                       <button
                         onClick={async (e) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           try {
                             await addToCart(product._id, 1);
                             toast.success("Added to cart successfully");
@@ -111,10 +130,7 @@ const Productcards = ({ headline, subheading, products }) => {
 
                 {/* Heart Icon */}
                 <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleWishlist(product._id);
-                  }}
+                  onClick={(e) => handleWishlistToggle(e, product._id)}
                   className="absolute bottom-2 right-2 p-2 bg-white/90 rounded-full hover:bg-white transition-colors z-10"
                 >
                   <Heart
@@ -126,7 +142,7 @@ const Productcards = ({ headline, subheading, products }) => {
                     fill={isInWishlist(product._id) ? "red" : "none"}
                   />
                 </button>
-              </div>
+              </Link>
             ))
           ) : (
             <div className="w-full text-center py-12">

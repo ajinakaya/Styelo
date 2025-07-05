@@ -7,12 +7,17 @@ import {
   ShoppingCart,
   Menu,
   X,
+  Settings,
+  LogOut,
+  Bell,
+  PackageCheck,
 } from "lucide-react";
 import logo from "../assets/logo1.png";
 import Search from "../components/search";
 import CategoryContainer from "../components/categorycontainer";
 import { useCart } from "../context/cartcontext";
 import { useWishlist } from "../context/wishlistcontext";
+import { useAuth } from "../context/authconetxt";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +27,8 @@ const Navbar = () => {
   const [showCategory, setShowCategory] = useState(false);
   const { cart } = useCart();
   const { wishlist } = useWishlist();
+  const { user, logout } = useAuth();
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const cartCount = cart?.length || 0;
   const wishlistCount = wishlist?.length || 0;
@@ -113,9 +120,95 @@ const Navbar = () => {
 
             {/* Right Icons */}
             <div className="flex items-center space-x-9">
-              <Link to="/account">
-                <User className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />
-              </Link>
+              <div className="relative">
+                <User
+                  className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]"
+                  onClick={() => setShowUserDropdown(!showUserDropdown)}
+                />
+                {showUserDropdown && (
+                  <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    {user ? (
+                      <div className="py-1 text-sm text-gray-800">
+                        <div className="px-3 py-3 border-b border-gray-100">
+                          <div className="flex items-center space-x-3">
+                            {user.image ? (
+                              <img
+                                src={`http://localhost:3001/${user.image}`}
+                                alt="Profile"
+                                className="w-10 h-10 rounded-full flex-shrink-0"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                <User className="w-5 h-5 text-gray-500" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-sm truncate">
+                                {user?.username || "No Name"}
+                              </div>
+                              <div className="text-gray-500 text-xs truncate">
+                                {user?.email}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <Link
+                          to="/profile-edit"
+                          className="flex items-center px-3 py-2 text-sm hover:bg-gray-50 transition"
+                          onClick={() => setShowUserDropdown(false)}
+                        >
+                          <Settings className="w-4 h-4 mr-2 text-gray-500" />
+                          Account
+                        </Link>
+                        <Link
+                          to="/notifications"
+                          className="flex items-center px-3 py-2 text-sm hover:bg-gray-50 transition"
+                          onClick={() => setShowUserDropdown(false)}
+                        >
+                          <Bell className="w-4 h-4 mr-2 text-gray-500" />
+                          Notifications
+                        </Link>
+                        <Link
+                          to="/my-orders"
+                          className="flex items-center px-3 py-2 text-sm hover:bg-gray-50 transition"
+                          onClick={() => setShowUserDropdown(false)}
+                        >
+                          <PackageCheck className="w-4 h-4 mr-2 text-gray-500" />
+                          Orders
+                        </Link>
+                        <button
+                          onClick={() => {
+                            logout();
+                            setShowUserDropdown(false);
+                          }}
+                          className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                        >
+                          <LogOut className="w-4 h-4 mr-2 text-red-500" />
+                          Logout
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="py-1 text-sm text-gray-700">
+                        <Link
+                          to="/login"
+                          className="block px-3 py-2 hover:bg-gray-50 transition"
+                          onClick={() => setShowUserDropdown(false)}
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          to="/register"
+                          className="block px-3 py-2 hover:bg-gray-50 transition"
+                          onClick={() => setShowUserDropdown(false)}
+                        >
+                          Register
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <button onClick={() => setShowSearch(true)}>
                 <SearchIcon className="w-5 h-5 cursor-pointer transition stroke-2 text-black hover:text-[#B88E2F]" />

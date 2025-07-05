@@ -94,7 +94,7 @@ const MyOrders = () => {
           <div className="bg-white rounded-xl border border-black/30 p-6 mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Order History</h1>
+                <h1 className="text-3xl font-semibold text-black">Order History</h1>
                 <p className="text-gray-600 mt-1">Manage and track your orders</p>
               </div>
               <div className="text-right">

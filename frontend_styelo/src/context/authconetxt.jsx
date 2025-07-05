@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
   const login = (token) => {
     setAuthToken(token);
     localStorage.setItem('authToken', token);
+       window.location.href = "/";
   };
 
   const logout = () => {
@@ -44,7 +45,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('authToken');
     sessionStorage.removeItem("user_token");
+    window.location.href = "/";
   };
+  
 
   return (
     <AuthContext.Provider value={{ authToken, user, login, logout, loading }}>
