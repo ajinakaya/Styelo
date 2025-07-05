@@ -10,7 +10,7 @@ const FurnitureFilter = () => {
     maxPrice: 200000, 
     color: '',
     category: '', 
-    section: '', 
+    sector: '', 
     tag: '', 
     sortBy: 'name', 
     sortOrder: 'asc' 
@@ -18,7 +18,7 @@ const FurnitureFilter = () => {
 
   const [furniture, setFurniture] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [sections, setSections] = useState([]);
+  const [sectors, setSectors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('All Products');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -43,7 +43,7 @@ const FurnitureFilter = () => {
   useEffect(() => {
     fetchFurniture();
     fetchCategories();
-    fetchSections(); 
+    fetchSectors(); 
   }, []);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const FurnitureFilter = () => {
       if (filters.maxPrice < MAX_PRICE) params.append('maxPrice', filters.maxPrice);
       if (filters.color) params.append('color', filters.color);
       if (filters.category) params.append('category', filters.category);
-      if (filters.section) params.append('section', filters.section);
+      if (filters.sector) params.append('sector', filters.sector);
       if (filters.tag) {
         params.append('tag', filters.tag);
         setTitle(filters.tag);
@@ -74,7 +74,7 @@ const FurnitureFilter = () => {
         url = `${API_BASE_URL}/furniture/all`;
       }
 
-      if (!filters.tag && !filters.category && !filters.section && !filters.color) {
+      if (!filters.tag && !filters.category && !filters.sector && !filters.color) {
         setTitle('All Products');
       }
 
@@ -100,18 +100,18 @@ const FurnitureFilter = () => {
     }
   };
 
-  const fetchSections = async (categoryId = '') => {
+  const fetchSectors = async (categoryId = '') => {
     try {
       const url = categoryId
-        ? `${API_BASE_URL}/section?category=${categoryId}`
-        : `${API_BASE_URL}/section`;
+        ? `${API_BASE_URL}/sector?category=${categoryId}`
+        : `${API_BASE_URL}/sector`;
 
       const res = await fetch(url);
       const data = await res.json();
-      setSections(data);
+      setSectors(data);
     } catch (err) {
       console.error('Error fetching sections:', err);
-      setSections([]);
+      setSectors([]);
     }
   };
 
@@ -120,7 +120,7 @@ const FurnitureFilter = () => {
       const updated = { ...prev, [key]: value };
 
       if (key === 'category') {
-        fetchSections(value);
+        fetchSectors(value);
         updated.section = '';
       }
 
@@ -163,13 +163,13 @@ const FurnitureFilter = () => {
       maxPrice: MAX_PRICE, 
       color: '', 
       category: '', 
-      section: '', 
+      sector: '', 
       tag: '', 
       sortBy: 'name', 
       sortOrder: 'asc' 
     });
     setTitle('All Products');
-    fetchSections();
+    fetchSectors();
   };
 
   const FilterSection = ({ className = "" }) => (
@@ -255,12 +255,12 @@ const FurnitureFilter = () => {
         <h3 className="text-md font-semibold mb-3 text-gray-900">Section</h3>
         <select
           className="w-full px-3 py-2 text-sm bg-gray-100 border-0 rounded-xl "
-          value={filters.section}
-          onChange={(e) => handleFilterChange('section', e.target.value)}
+          value={filters.sector}
+          onChange={(e) => handleFilterChange('sector', e.target.value)}
         >
           <option value="">All Section</option>
-          {sections.map(s => (
-            <option key={s._id} value={s._id}>{s.section}</option>
+          {sectors.map(s => (
+            <option key={s._id} value={s._id}>{s.sector}</option>
           ))}
         </select>
       </div>

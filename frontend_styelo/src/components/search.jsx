@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
-import axios from 'axios';
+import React, { useState } from "react";
+import { FiSearch } from "react-icons/fi";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Search = ({ onClose }) => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -59,7 +60,7 @@ const Search = ({ onClose }) => {
               value={searchText}
               onChange={handleChange}
             />
-            <button 
+            <button
               onClick={handleSearchIconClick}
               className="absolute top-3 left-4 text-gray-400 text-lg hover:text-gray-600"
             >
@@ -76,9 +77,12 @@ const Search = ({ onClose }) => {
               <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-3">
                 <FiSearch className="text-gray-400 text-xl" />
               </div>
-             <h3 className="text-lg font-semibold text-gray-600 mb-2">Start your search</h3>
+              <h3 className="text-lg font-semibold text-gray-600 mb-2">
+                Start your search
+              </h3>
               <p className="text-gray-500 text-sm text-center max-w-md">
-                Search for furniture by name or select a category to browse our collection
+                Search for furniture by name or select a category to browse our
+                collection
               </p>
             </div>
           ) : (
@@ -90,9 +94,10 @@ const Search = ({ onClose }) => {
                 </div>
               ) : (
                 results.map((item) => (
-                  <div 
-                    key={item._id} 
-                    className="bg-white border border-black/20 rounded-2xl p-4  transition-shadow cursor-pointer"
+                  <Link
+                    key={item._id}
+                    to={`/product/${item._id}`}
+                    className="block bg-white border border-black/20 rounded-2xl p-4 transition-shadow hover:shadow-md"
                   >
                     <div className="flex items-start gap-4">
                       {/* Product Image */}
@@ -103,7 +108,7 @@ const Search = ({ onClose }) => {
                           className="w-25 h-30 object-cover rounded-xl"
                         />
                       </div>
-                      
+
                       {/* Product Details */}
                       <div className="flex-1 min-w-0">
                         {/* Product Name and Price */}
@@ -115,30 +120,32 @@ const Search = ({ onClose }) => {
                             Rs.{item.price.toLocaleString()}
                           </span>
                         </div>
-                        
+
                         {/* Size */}
                         <p className="text-sm text-gray-600 mb-2">
-                          Size: {item.specifications?.dimensions?.overall || 'N/A'}
+                          Size:{" "}
+                          {item.specifications?.dimensions?.overall || "N/A"}
                         </p>
-                        
+
                         {/* Colors */}
                         <div>
                           <p className="text-sm text-gray-600 mb-2">Colors:</p>
                           <div className="flex gap-2">
-                            {
-                            item.colorOptions?.slice(0, 4).map((option, idx) => (
-                              <div
-                                key={idx}
-                                className="w-5 h-5 rounded-full border-2 border-white "
-                                style={{ backgroundColor: option.colorCode }}
-                                title={option.color}
-                              />
-                            ))}
+                            {item.colorOptions
+                              ?.slice(0, 4)
+                              .map((option, idx) => (
+                                <div
+                                  key={idx}
+                                  className="w-5 h-5 rounded-full border-2 border-white"
+                                  style={{ backgroundColor: option.colorCode }}
+                                  title={option.color}
+                                />
+                              ))}
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
               )}
             </div>

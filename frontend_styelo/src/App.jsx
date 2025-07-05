@@ -21,6 +21,9 @@ import MyOrders from "./pages/myorder";
 import RoomDesigner3D from "./pages/room";
 import ProfileEdit from "./pages/profile";
 import NotificationPage from "./pages/notification";
+import Decors from "./pages/decor";
+import RoomDesigner from "./pages/room3d";
+import FurnitureManagement from "./pages/admin/furnituredetail";
 
 
 
@@ -34,7 +37,7 @@ const App = () => {
       <>
        <ToastContainer
         position="bottom-right"
-        autoClose={2000} // 2 seconds
+        autoClose={2000}
       />
     <Routes>
       <Route path="/login" element={<LoginPage />} />
@@ -56,6 +59,10 @@ const App = () => {
       <Route path="/room-designer" element={<RoomDesigner3D />} />
       <Route path="/profile-edit" element={<ProfileEdit />} />
       <Route path="/notifications" element={<NotificationPage />} />
+      <Route path="/decor" element={<Decors />} />
+      <Route path="/room" element={<RoomDesigner />} />
+      <Route path="/admin/furniture-management" element={<FurnitureManagement />} />
+      {/* Add more routes as needed */}
       
    
       

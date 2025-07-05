@@ -50,7 +50,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Furniture", action: "category" },
-    { name: "Decors", path: "/decors" },
+    { name: "Decors", path: "/decor" },
     { name: "About", path: "/aboutus" },
     { name: "Contact", path: "/contact" },
   ];
