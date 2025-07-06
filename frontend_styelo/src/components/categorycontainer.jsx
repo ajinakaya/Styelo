@@ -46,27 +46,39 @@ const CategoryContainer = ({ onClose }) => {
           <div className="space-y-1 border-r border-gray-200 pr-3">
             <button 
               onClick={handleAllProductsClick}
-              className="block text-gray-800 hover:text-blue-600 font-medium text-left w-full"
+              className="block text-gray-800 hover:text-blue-800 font-semibold text-left w-full"
             >
               All Products
             </button>
             <button 
               onClick={() => handleTagClick('New Arrival')}
-              className="block text-gray-800 hover:text-blue-600 font-medium text-left w-full"
+              className="block text-gray-800 hover:text-blue-600 font-Regular text-left w-full"
             >
               New Arrival
             </button>
             <button 
+              onClick={() => handleTagClick('Best Seller')}
+              className="block text-gray-800 hover:text-blue-600 font-Regular text-left w-full"
+            >
+              Best Seller
+            </button>
+            <button 
               onClick={() => handleTagClick('Recommended')}
-              className="block text-gray-800 hover:text-blue-600 font-medium text-left w-full"
+              className="block text-gray-800 hover:text-blue-600 font-Regular text-left w-full"
             >
               Recommended
             </button>
             <button 
               onClick={() => handleTagClick('Popular')}
-              className="block text-gray-800 hover:text-blue-600 font-medium text-left w-full"
+              className="block text-gray-800 hover:text-blue-600 font-Regular text-left w-full"
             >
               Popular
+            </button>
+            <button 
+              onClick={() => handleTagClick('Featured')}
+              className="block text-gray-800 hover:text-blue-600 font-Regular text-left w-full"
+            >
+             Featured
             </button>
           </div>
 

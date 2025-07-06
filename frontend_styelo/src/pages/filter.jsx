@@ -21,6 +21,7 @@ const FurnitureFilter = () => {
   const [furniture, setFurniture] = useState([]);
   const [categories, setCategories] = useState([]);
   const [sectors, setSectors] = useState([]);
+  const [availableColors, setAvailableColors] = useState([]); 
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('All Products');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -28,7 +29,6 @@ const FurnitureFilter = () => {
 
   const API_BASE_URL = 'http://localhost:3001';
   const availableTags = ['New Arrival', 'Best Seller', 'Featured', 'Popular', 'Recommended'];
-  const availableColors = ['Red', 'Blue', 'Green', 'Black', 'White', 'Brown', 'Gray', 'Beige', 'Navy', 'Cream'];
 
   const MAX_PRICE = 200000;
   const MIN_PRICE = 0;
@@ -53,9 +53,24 @@ const FurnitureFilter = () => {
     return category ? category._id : null;
   };
 
+  const fetchColors = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/furniture/colors`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      console.log('Colors loaded:', data);
+      setAvailableColors(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error fetching colors:', err);
+      setAvailableColors([]);
+    }
+  };
+
   useEffect(() => {
     const initializeData = async () => {
-      await Promise.all([fetchCategories(), fetchSectors()]);
+      await Promise.all([fetchCategories(), fetchSectors(), fetchColors()]); // Added fetchColors
       setDataLoaded(true);
     };
     initializeData();
@@ -267,7 +282,7 @@ const FurnitureFilter = () => {
       sortOrder: 'asc' 
     });
     setTitle('All Products');
-    fetchSectors(); // Fetch all sectors when clearing filters
+    fetchSectors(); 
   };
 
   const FilterSection = ({ className = "" }) => (
@@ -378,30 +393,29 @@ const FurnitureFilter = () => {
         )}
       </div>
 
-      {/* Color */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
         <h3 className="text-md font-semibold mb-3 text-gray-900">Color</h3>
-        <div className="grid grid-cols-5 gap-2">
-          {availableColors.map(color => (
-            <button
-              key={color}
-              onClick={() => handleFilterChange('color', filters.color === color ? '' : color)}
-              className={`w-8 h-8 rounded-full border-2 transition-all ${
-                filters.color === color
-                  ? 'border-black/20 scale-110'
-                  : 'border-gray-300 hover:border-gray-400'
-              }`}
-              style={{
-                backgroundColor:
-                  color.toLowerCase() === 'beige' ? '#F5F5DC' :
-                  color.toLowerCase() === 'cream' ? '#FFFDD0' :
-                  color.toLowerCase() === 'navy' ? '#000080' :
-                  color.toLowerCase()
-              }}
-              title={color}
-            />
-          ))}
-        </div>
+        {availableColors.length === 0 ? (
+          <p className="text-xs text-gray-500">Loading colors...</p>
+        ) : (
+          <div className="grid grid-cols-5 gap-2">
+            {availableColors.map(color => (
+              <button
+                key={color.name}
+                onClick={() => handleFilterChange('color', filters.color === color.name ? '' : color.name)}
+                className={`w-8 h-8 rounded-full border-2 transition-all ${
+                  filters.color === color.name
+                    ? 'border-black/20 scale-110'
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+                style={{
+                  backgroundColor: color.code
+                }}
+                title={color.name}
+              />
+            ))}
+          </div>
+        )}
         {filters.color && (
           <div className="mt-2 text-xs text-gray-600">Selected: {filters.color}</div>
         )}
@@ -422,6 +436,7 @@ const FurnitureFilter = () => {
   console.log('Current filters:', filters);
   console.log('Categories:', categories);
   console.log('Sectors:', sectors);
+  console.log('Available colors:', availableColors);
   console.log('Data loaded:', dataLoaded);
 
   return (
