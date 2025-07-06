@@ -76,7 +76,7 @@ const RegisterPage = () => {
 
             {/* Username */}
             <div className="mb-3">
-              <label className="block text-base font-medium text-gray-800 mb-2">
+              <label className="block text-base font-medium text-gray-800 text-[16px] mb-2">
                 Username
               </label>
               <div className="relative">
@@ -95,7 +95,7 @@ const RegisterPage = () => {
 
             {/* Email */}
             <div className="mb-3">
-              <label className="block text-base font-medium text-gray-800 mb-2">
+              <label className="block text-base font-medium text-gray-800 text-[16px] mb-2">
                 Email
               </label>
               <div className="relative">
@@ -114,7 +114,7 @@ const RegisterPage = () => {
 
             {/* Password */}
             <div className="mb-3">
-              <label className="block text-base font-medium text-gray-800 mb-2">
+              <label className="block text-base font-medium text-gray-800  text-[16px] mb-2">
                 Password
               </label>
               <div className="relative w-[551px] h-[51.93px]">
@@ -123,7 +123,7 @@ const RegisterPage = () => {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={form.password}
-                  onChange={handleChange}
+                  onChange={(e) => handleChange("password", e.target.value)}
                   className="w-full h-full pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
@@ -146,37 +146,38 @@ const RegisterPage = () => {
             {/* Confirm Password */}
 
             <div className="mb-3">
-              <label className="block text-base font-medium text-gray-800 mb-2">
+              <label className="block text-base font-medium text-gray-800 text-[16px] mb-2">
                 Confirm Password
               </label>
               <div className="relative w-[551px] h-[51.93px]">
                 <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <input
-                  type={showPassword ? "text" : "ConfirmPassword"}
-                  name="ConfirmPassword"
-                  value={form.password}
-                  onChange={handleChange}
+                  <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={form.confirmPassword}
+                  onChange={(e) =>
+                    handleChange("confirmPassword", e.target.value)
+                  }
                   className="w-full h-full pl-12 pr-12 border border-gray-300 rounded-lg text-base bg-white placeholder-gray-400 focus:outline-none focus:border-gray-400"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2"
                 >
-                  {showPassword ? (
+                  {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400" />
                   ) : (
                     <Eye className="h-5 w-5 text-gray-400" />
                   )}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
               )}
             </div>
 
             {/* Terms */}
-            <p className="text-sm text-center text-gray-700 mb-5">
+            <p className="text-[16px] text-center text-gray-700 mb-5">
               By signing up, you agree to our{" "}
               <span className="text-blue-600 hover:underline cursor-pointer">
                 Terms of use

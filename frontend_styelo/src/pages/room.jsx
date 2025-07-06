@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { DragControls } from 'three/examples/jsm/controls/DragControls';
 
-const RoomDesigner3D = () => {
+const RoomDesigner = () => {
   const mountRef = useRef(null);
   const sceneRef = useRef();
   const cameraRef = useRef();
@@ -203,4 +203,4 @@ const RoomDesigner3D = () => {
   );
 };
 
-export default RoomDesigner3D;
+export default RoomDesigner;

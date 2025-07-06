@@ -46,24 +46,24 @@ const ForgotPassword = () => {
         <img src={logo} alt="Logo" className="h-24" />
       </div>
 
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full ">
         <form
           onSubmit={handleSubmit}
           className="bg-white rounded-2xl p-16 shadow-sm border border-gray-200 w-full max-w-lg"
         >
           {/* Header */}
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-medium text-gray-900 mb-2">
+            <h1 className="text-4xl font-medium text-black mb-2">
               Forgot Password
             </h1>
-            <p className="text-gray-600">
+            <p className="font-medium text-black/61">
               No worries, we'll send you reset instructions
             </p>
           </div>
 
           {/* Email Field */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-[17px] font-medium text-gray-700 mb-2">
               Email
             </label>
             <div className="relative">

@@ -82,11 +82,11 @@ const SignInPage = () => {
 
             {/* Email */}
             <div className="mb-6">
-              <label className="block text-base font-medium text-gray-800 mb-3">
+              <label className="block text-base font-medium text-gray-800 text-[17px] mb-3">
                 Email
               </label>
               <div className="relative w-[551px] h-[51.93px]">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="email"
                   name="email"
@@ -102,11 +102,11 @@ const SignInPage = () => {
 
             {/* Password */}
             <div className="mb-3">
-              <label className="block text-base font-medium text-gray-800 mb-3">
+              <label className="block text-base font-medium text-gray-800  text-[17px] mb-3">
                 Password
               </label>
               <div className="relative w-[551px] h-[51.93px]">
-                <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <KeyRound className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -136,7 +136,7 @@ const SignInPage = () => {
               <button
                 type="button"
                 onClick={() => navigate("/forgot-password")}
-                className="text-sm text-gray-600 hover:text-gray-700"
+                className="text-[16px] text-gray-600 hover:text-gray-700"
               >
                 Forgot Password?
               </button>
