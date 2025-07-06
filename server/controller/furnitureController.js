@@ -21,6 +21,7 @@ const createFurniture = async (req, res) => {
     const thumbnail = req.files?.thumbnail?.[0]?.path || null;
     const productIconPaths = req.files?.productIcons?.map(file => file.path) || [];
     const allFurnitureImages = req.files?.furnitureimages?.map(file => file.path) || [];
+    const specificationImage = req.files?.specificationImage?.[0]?.path || null;
 
     const parsedColorVariants = JSON.parse(colorOptions || "[]");
    
@@ -42,16 +43,36 @@ const createFurniture = async (req, res) => {
       icon: productIconPaths[index] || null,
     }));
 
+     const parsedDescription = JSON.parse(description || '{}');
+      if (typeof parsedDescription.features === 'string') {
+      parsedDescription.features = parsedDescription.features
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    if (typeof parsedDescription.whatIncluded === 'string') {
+      parsedDescription.whatIncluded = parsedDescription.whatIncluded
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+    }
+
+    const parsedSpecifications = JSON.parse(specifications || '{}');
+    if (specificationImage) {
+      parsedSpecifications.specificationImage = specificationImage;
+    }
+
     const furniture = new Furniture({
       name,
-      description,
+      description: parsedDescription,
       price,
       thumbnail,
       colorOptions: processedColorVariants, 
       category,
       sector,
       productOverview: parsedOverview,
-      specifications: JSON.parse(specifications || "{}"),
+      specifications: parsedSpecifications,
       returnPolicy,
       tags: JSON.parse(tags || "[]"),
     });
@@ -98,20 +119,46 @@ const updateFurniture = async (req, res) => {
 
     const data = req.body;
 
-    for (let field of ["name", "description", "price", "category", "sector", "returnPolicy"]) {
+    for (let field of ["name", "price", "category", "sector", "returnPolicy"]) {
       if (data[field]) existing[field] = data[field];
     }
 
-    if (data.color) existing.color = JSON.parse(data.color);
-    if (data.tags) existing.tags = JSON.parse(data.tags);
-    if (data.specifications) existing.specifications = JSON.parse(data.specifications);
+    if (data.description) {
+      const parsed = JSON.parse(data.description);
 
-    // Handle images
-    if (req.files?.thumbnail?.[0]) existing.thumbnail = req.files.thumbnail[0].path;
-    if (req.files?.furnitureimages?.length)
-      existing.furnitureimages = req.files.furnitureimages.map(f => f.path);
+      if (typeof parsed.features === "string") {
+        parsed.features = parsed.features
+          .split("\n")
+          .map(s => s.trim())
+          .filter(Boolean);
+      }
 
-    // Handle productOverview with icons
+      if (typeof parsed.whatIncluded === "string") {
+        parsed.whatIncluded = parsed.whatIncluded
+          .split("\n")
+          .map(s => s.trim())
+          .filter(Boolean);
+      }
+
+      existing.description = parsed;
+    }
+
+    if (data.tags) {
+      existing.tags = JSON.parse(data.tags);
+    }
+
+    if (data.specifications) {
+      const parsedSpecs = JSON.parse(data.specifications);
+      if (req.files?.specificationImage?.[0]) {
+        parsedSpecs.specificationImage = req.files.specificationImage[0].path;
+      }
+      existing.specifications = parsedSpecs;
+    }
+
+    if (req.files?.thumbnail?.[0]) {
+      existing.thumbnail = req.files.thumbnail[0].path;
+    }
+
     if (data.productOverview) {
       const overview = JSON.parse(data.productOverview);
       const icons = req.files?.productIcons || [];
@@ -119,6 +166,24 @@ const updateFurniture = async (req, res) => {
         label: item.label,
         icon: icons[i]?.path || existing.productOverview?.[i]?.icon || null,
       }));
+    }
+
+    if (data.colorOptions) {
+      const parsedColorVariants = JSON.parse(data.colorOptions);
+      const allFurnitureImages = req.files?.furnitureimages?.map(file => file.path) || [];
+      const processedColorVariants = parsedColorVariants.map((variant, index) => {
+        const imagesPerVariant = Math.ceil(allFurnitureImages.length / parsedColorVariants.length);
+        const startIndex = index * imagesPerVariant;
+        const endIndex = startIndex + imagesPerVariant;
+        const variantImages = allFurnitureImages.slice(startIndex, endIndex);
+
+        return {
+          color: variant.color,
+          colorCode: variant.colorCode || null,
+          furnitureimages: variantImages,
+        };
+      });
+      existing.colorOptions = processedColorVariants;
     }
 
     await existing.save();
@@ -130,7 +195,6 @@ const updateFurniture = async (req, res) => {
 };
 
 
-// Delete Furniture
 const deleteFurniture = async (req, res) => {
   try {
     const deleted = await Furniture.findByIdAndDelete(req.params.id);
