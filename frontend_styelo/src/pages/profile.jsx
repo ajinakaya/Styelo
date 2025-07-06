@@ -18,7 +18,6 @@ const UserProfile = () => {
   useEffect(() => {
     if (authUser) {
       setUser(authUser);
-      // Fetch orders when user is available
       fetchOrders();
     }
   }, [authUser, fetchOrders]);
@@ -119,7 +118,6 @@ const UserProfile = () => {
       return;
     }
 
-    // Double confirmation for such a critical action
     if (!window.confirm('This will permanently delete all your data. Are you absolutely sure?')) {
       return;
     }

@@ -2,21 +2,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { 
-  Home, 
-  RotateCw, 
-  Move, 
-  Trash2, 
-  Save, 
-  Download, 
-  Upload,
-  Settings,
-  Palette,
-  Maximize2,
-  Grid,
-  Eye,
-  EyeOff,
-  Square,
-  Layout
+RotateCw,Move,Trash2,Download,Grid,Square,Layout
 } from 'lucide-react';
 
 const RoomDesigner3D = () => {
@@ -44,7 +30,6 @@ const RoomDesigner3D = () => {
   const [viewMode, setViewMode] = useState('perspective');
   const [roomColor, setRoomColor] = useState('#f5f5dc');
 
-  // Enhanced furniture catalog with chest of drawers
   const furnitureCatalog = [
     {
       id: 'sofa',
@@ -495,7 +480,7 @@ const RoomDesigner3D = () => {
 
     raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
     
-    // Create a plane at y=0 for dragging
+  
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
     const intersection = new THREE.Vector3();
     

@@ -91,7 +91,7 @@ useEffect(() => {
             <h1 className="text-3xl font-semibold">{product.name}</h1>
             <div className="text-2xl font-bold">Rs. {product.price}</div>
 
-            <p className="text-gray-600">{product.description}</p>
+            <p className="text-gray-600">{product.description.summary}</p>
 
             {/* Color Selection */}
             <div>
@@ -140,7 +140,7 @@ useEffect(() => {
           <div>
             <h2 className="text-xl font-semibold mb-4">Features</h2>
             <ul className="list-disc pl-5 space-y-2">
-              {product.specifications.features?.map((f, i) => (
+              {product.features?.map((f, i) => (
                 <li key={i} className="text-gray-700">{f.label}: {f.value}</li>
               ))}
             </ul>
