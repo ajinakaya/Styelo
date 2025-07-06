@@ -36,6 +36,7 @@ const Featured = () => {
         products={products} 
         headline="Featured Products" 
         subheading="Visit Styelo to see amazing creations from our designers."
+        tag="Featured"
       />
     </div>
   );

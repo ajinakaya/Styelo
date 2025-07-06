@@ -34,8 +34,9 @@ const NewArrivals = () => {
     <div>
       <Productcards 
         products={products} 
-        headline="New Arrivals" 
+        headline="New Arrival" 
         subheading="Visit Styelo to see amazing creations from our designers."
+        tag="New Arrival"
       />
     </div>
   );

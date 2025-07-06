@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Filter, X,  ArrowUpDown } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Loader2, Filter, X, ArrowUpDown } from 'lucide-react';
 import Navbar from '../layout/navbar';
 import FilterCard from '../components/flitercard';
 
-
 const FurnitureFilter = () => {
+  const location = useLocation();
+  
   const [filters, setFilters] = useState({ 
     minPrice: 0, 
     maxPrice: 200000, 
@@ -22,6 +24,7 @@ const FurnitureFilter = () => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('All Products');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const API_BASE_URL = 'http://localhost:3001';
   const availableTags = ['New Arrival', 'Best Seller', 'Featured', 'Popular', 'Recommended'];
@@ -40,16 +43,71 @@ const FurnitureFilter = () => {
     { value: 'oldest', label: 'Oldest First', sortBy: 'createdAt', sortOrder: 'asc' }
   ];
 
+  const findSectorIdByName = (sectorName) => {
+    const sector = sectors.find(s => s.sector?.toLowerCase() === sectorName.toLowerCase());
+    return sector ? sector._id : null;
+  };
+
+  const findCategoryIdByName = (categoryName) => {
+    const category = categories.find(c => c.category?.toLowerCase() === categoryName.toLowerCase());
+    return category ? category._id : null;
+  };
+
   useEffect(() => {
-    fetchFurniture();
-    fetchCategories();
-    fetchSectors(); 
+    const initializeData = async () => {
+      await Promise.all([fetchCategories(), fetchSectors()]);
+      setDataLoaded(true);
+    };
+    initializeData();
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(() => fetchFurniture(), 500);
-    return () => clearTimeout(timeout);
-  }, [filters]);
+    if (!dataLoaded) return;
+
+    const urlParams = new URLSearchParams(location.search);
+    const newFilters = { 
+      minPrice: 0, 
+      maxPrice: 200000, 
+      color: '',
+      category: '', 
+      sector: '', 
+      tag: '', 
+      sortBy: 'name', 
+      sortOrder: 'asc' 
+    };
+
+    if (urlParams.get('tag')) {
+      newFilters.tag = urlParams.get('tag');
+      setTitle(urlParams.get('tag'));
+    }
+    
+    if (urlParams.get('sector')) {
+      const sectorParam = urlParams.get('sector');
+      const sectorId = findSectorIdByName(sectorParam);
+      newFilters.sector = sectorId || sectorParam;
+      setTitle(sectorParam);
+    }
+
+    if (urlParams.get('category')) {
+      const categoryParam = urlParams.get('category');
+      const categoryId = findCategoryIdByName(categoryParam);
+      newFilters.category = categoryId || categoryParam;
+      setTitle(categoryParam);
+    }
+
+    setFilters(newFilters);
+
+    if (!urlParams.get('tag') && !urlParams.get('sector') && !urlParams.get('category')) {
+      setTitle('All Products');
+    }
+  }, [location.search, dataLoaded, categories, sectors]);
+
+  useEffect(() => {
+    if (dataLoaded) {
+      const timeout = setTimeout(() => fetchFurniture(), 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [filters, dataLoaded]);
 
   const fetchFurniture = async () => {
     setLoading(true);
@@ -60,10 +118,7 @@ const FurnitureFilter = () => {
       if (filters.color) params.append('color', filters.color);
       if (filters.category) params.append('category', filters.category);
       if (filters.sector) params.append('sector', filters.sector);
-      if (filters.tag) {
-        params.append('tag', filters.tag);
-        setTitle(filters.tag);
-      }
+      if (filters.tag) params.append('tag', filters.tag);
       if (filters.sortBy) params.append('sortBy', filters.sortBy);
       if (filters.sortOrder) params.append('sortOrder', filters.sortOrder);
 
@@ -74,15 +129,29 @@ const FurnitureFilter = () => {
         url = `${API_BASE_URL}/furniture/all`;
       }
 
-      if (!filters.tag && !filters.category && !filters.sector && !filters.color) {
-        setTitle('All Products');
-      }
+      console.log('Fetching furniture with URL:', url);
 
       const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
-      setFurniture(data);
+      
+      // Ensure data is always an array
+      if (Array.isArray(data)) {
+        setFurniture(data);
+      } else if (data && Array.isArray(data.furniture)) {
+        setFurniture(data.furniture);
+      } else if (data && Array.isArray(data.data)) {
+        setFurniture(data.data);
+      } else {
+        console.warn('Unexpected data format:', data);
+        setFurniture([]);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching furniture:', err);
       setFurniture([]);
     } finally {
       setLoading(false);
@@ -92,8 +161,12 @@ const FurnitureFilter = () => {
   const fetchCategories = async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/category`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
-      setCategories(data);
+      console.log('Categories loaded:', data);
+      setCategories(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching categories:', err);
       setCategories([]);
@@ -107,21 +180,46 @@ const FurnitureFilter = () => {
         : `${API_BASE_URL}/sector`;
 
       const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
       const data = await res.json();
-      setSectors(data);
+      console.log('Sectors loaded:', data);
+      setSectors(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Error fetching sections:', err);
+      console.error('Error fetching sectors:', err);
       setSectors([]);
     }
   };
 
   const handleFilterChange = (key, value) => {
+    console.log(`Filter change: ${key} = ${value}`);
+    
     setFilters(prev => {
       const updated = { ...prev, [key]: value };
-
-      if (key === 'category') {
-        fetchSectors(value);
-        updated.section = '';
+      if (key === 'category' && value) {
+        const categoryObj = categories.find(c => c._id === value);
+        setTitle(categoryObj ? categoryObj.category : 'Category');
+      } else if (key === 'sector' && value) {
+        const sectorObj = sectors.find(s => s._id === value);
+        setTitle(sectorObj ? sectorObj.sector : 'Sector');
+      } else if (key === 'tag' && value) {
+        setTitle(value);
+      } else if (!value && (key === 'tag' || key === 'sector' || key === 'category')) {
+        // Check if any other filters are active
+        const hasActiveFilters = Object.entries(updated).some(([filterKey, filterValue]) => {
+          if (filterKey === 'minPrice' && filterValue > MIN_PRICE) return true;
+          if (filterKey === 'maxPrice' && filterValue < MAX_PRICE) return true;
+          if (filterKey === 'color' && filterValue) return true;
+          if (filterKey === 'tag' && filterValue) return true;
+          if (filterKey === 'sector' && filterValue) return true;
+          if (filterKey === 'category' && filterValue) return true;
+          return false;
+        });
+        
+        if (!hasActiveFilters) {
+          setTitle('All Products');
+        }
       }
 
       return updated;
@@ -169,7 +267,7 @@ const FurnitureFilter = () => {
       sortOrder: 'asc' 
     });
     setTitle('All Products');
-    fetchSectors();
+    fetchSectors(); // Fetch all sectors when clearing filters
   };
 
   const FilterSection = ({ className = "" }) => (
@@ -216,7 +314,7 @@ const FurnitureFilter = () => {
         </div>
       </div>
 
-       {/* Tags */}
+      {/* Tags */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
         <h3 className="text-md font-semibold mb-3 text-gray-900">Tags</h3>
         <div className="flex flex-wrap gap-1.5">
@@ -234,41 +332,55 @@ const FurnitureFilter = () => {
         </div>
       </div>
 
-
       {/* Category */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
         <h3 className="text-md font-semibold mb-3 text-gray-900">Category</h3>
         <select
-          className="w-full px-3 py-2 text-sm bg-gray-100 rounded-xl "
+          className="w-full px-3 py-2 text-sm bg-gray-100 rounded-xl border-0 focus:ring-2 focus:ring-orange-500 focus:outline-none"
           value={filters.category}
-          onChange={(e) => handleFilterChange('category', e.target.value)}
+          onChange={(e) => {
+            console.log('Category selected:', e.target.value);
+            handleFilterChange('category', e.target.value);
+          }}
         >
           <option value="">All Categories</option>
-          {categories.map(c => (
-            <option key={c._id} value={c._id}>{c.category}</option>
+          {categories.map(s => (
+            <option key={s._id} value={s._id}>
+              {s.category}
+            </option>
           ))}
         </select>
+        {categories.length === 0 && (
+          <p className="text-xs text-gray-500 mt-2">Loading categories...</p>
+        )}
       </div>
 
-      {/* Section */}
+      {/* Sector */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-        <h3 className="text-md font-semibold mb-3 text-gray-900">Section</h3>
+        <h3 className="text-md font-semibold mb-3 text-gray-900">Sector</h3>
         <select
-          className="w-full px-3 py-2 text-sm bg-gray-100 border-0 rounded-xl "
+          className="w-full px-3 py-2 text-sm bg-gray-100 border-0 rounded-xl focus:ring-2 focus:ring-orange-500 focus:outline-none"
           value={filters.sector}
-          onChange={(e) => handleFilterChange('sector', e.target.value)}
+          onChange={(e) => {
+            console.log('Sector selected:', e.target.value);
+            handleFilterChange('sector', e.target.value);
+          }}
         >
-          <option value="">All Section</option>
+          <option value="">All Sectors</option>
           {sectors.map(s => (
-            <option key={s._id} value={s._id}>{s.sector}</option>
+            <option key={s._id} value={s._id}>
+              {s.sector}
+            </option>
           ))}
         </select>
+        {sectors.length === 0 && (
+          <p className="text-xs text-gray-500 mt-2">Loading sectors...</p>
+        )}
       </div>
 
-      
       {/* Color */}
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
-        <h3 className="text-md font-semibold mb-3 text-gray-900 ">Color</h3>
+        <h3 className="text-md font-semibold mb-3 text-gray-900">Color</h3>
         <div className="grid grid-cols-5 gap-2">
           {availableColors.map(color => (
             <button
@@ -295,11 +407,9 @@ const FurnitureFilter = () => {
         )}
       </div>
 
-     
-
       <button
         onClick={clearFilters}
-        className="w-full bg-gray-100 text-gray-800 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200"
+        className="w-full bg-gray-100 text-gray-800 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
       >
         Clear All Filters
       </button>
@@ -308,14 +418,21 @@ const FurnitureFilter = () => {
 
   const currentSortValue = `${filters.sortBy}-${filters.sortOrder}`;
 
+  // Debug information
+  console.log('Current filters:', filters);
+  console.log('Categories:', categories);
+  console.log('Sectors:', sectors);
+  console.log('Data loaded:', dataLoaded);
+
   return (
     <div className="min-h-screen">
       <Navbar />
       <main className="max-w-7xl mx-auto px-6 py-8 font-poppins">
+        {/* Mobile Filter Button */}
         <div className="lg:hidden mb-6">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="flex items-center space-x-2 bg-white px-4 py-3 rounded-2xl shadow-sm"
+            className="flex items-center space-x-2 bg-white px-4 py-3 rounded-2xl shadow-sm border border-gray-100"
           >
             <Filter size={20} />
             <span>Filters</span>
@@ -323,10 +440,12 @@ const FurnitureFilter = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
+          {/* Desktop Filters */}
           <aside className="hidden lg:block lg:w-72">
             <FilterSection />
           </aside>
 
+          {/* Mobile Filters */}
           {showMobileFilters && (
             <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
               <div className="absolute right-0 top-0 h-full w-80 bg-white overflow-y-auto">
@@ -346,19 +465,22 @@ const FurnitureFilter = () => {
             </div>
           )}
 
+          {/* Main Content */}
           <section className="flex-1">
             <div className="mb-8">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 ">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                  <h1 className="text-[35px]  font-medium text-gray-900 mb-2  ">{title}</h1>
-                  <p className="text-gray-600">{loading ? 'Loading...' : `${furniture.length} products found`}</p>
+                  <h1 className="text-[35px] font-medium text-gray-900 mb-2">{title}</h1>
+                  <p className="text-gray-600">
+                    {loading ? 'Loading...' : `${Array.isArray(furniture) ? furniture.length : 0} products found`}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-2">
                   <ArrowUpDown size={20} className="text-gray-500" />
                   <select
                     value={currentSortValue}
                     onChange={(e) => handleSortChange(e.target.value)}
-                    className="px-4 py-2 bg-white border border-black/20 rounded-2xl "
+                    className="px-4 py-2 bg-white border border-black/20 rounded-2xl focus:ring-2 focus:ring-orange-500 focus:outline-none"
                   >
                     {sortOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -370,9 +492,20 @@ const FurnitureFilter = () => {
               </div>
             </div>
 
+            {/* Products Grid */}
             {loading ? (
               <div className="flex justify-center py-24">
                 <Loader2 className="animate-spin w-12 h-12 text-black" />
+              </div>
+            ) : furniture.length === 0 ? (
+              <div className="col-span-full text-center py-24">
+                <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+                <button
+                  onClick={clearFilters}
+                  className="mt-4 px-6 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors"
+                >
+                  Clear Filters
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

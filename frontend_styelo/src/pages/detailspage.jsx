@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Star, Plus, Minus,  ChevronDown, ChevronUp
+  Star, Plus, Minus, ChevronDown, ChevronUp
 } from 'lucide-react';
 import Navbar from '../layout/navbar';
 
@@ -16,26 +16,31 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-useEffect(() => {
-  const fetchProduct = async () => {
-    try {
-      console.log("Fetching:", id);
-      const res = await fetch(`http://localhost:3001/furniture/${id}`);
-      console.log("Status:", res.status);
-      const data = await res.json();
-      console.log("Data:", data);
-      setProduct(data);
-      setLoading(false);  
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Failed to load product.");
-      setLoading(false);  
-    }
-  };
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        console.log("Fetching:", id);
+        const res = await fetch(`http://localhost:3001/furniture/${id}`);
+        console.log("Status:", res.status);
+        const data = await res.json();
+        console.log("Data:", data);
+        setProduct(data);
+        
+        // Set the first color as selected by default
+        if (data.colorOptions && data.colorOptions.length > 0) {
+          setSelectedColor(data.colorOptions[0].color);
+        }
+        
+        setLoading(false);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Failed to load product.");
+        setLoading(false);
+      }
+    };
 
-  fetchProduct();
-}, [id]);
-
+    fetchProduct();
+  }, [id]);
 
   const incrementQuantity = () => setQuantity(q => q + 1);
   const decrementQuantity = () => setQuantity(q => (q > 1 ? q - 1 : 1));
@@ -77,11 +82,17 @@ useEffect(() => {
             </div>
             <div className="flex-1">
               <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
-                <img
-                  src={`http://localhost:3001/${images[selectedImage]}`}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
+                {images.length > 0 ? (
+                  <img
+                    src={`http://localhost:3001/${images[selectedImage]}`}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                    No image available
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -104,7 +115,9 @@ useEffect(() => {
                       setSelectedColor(c.color);
                       setSelectedImage(0);
                     }}
-                    className={`w-8 h-8 rounded-full border-2 ${selectedColor === c.color ? 'border-gray-900' : 'border-gray-300'}`}
+                    className={`w-8 h-8 rounded-full border-2 ${
+                      selectedColor === c.color ? 'border-gray-900' : 'border-gray-300'
+                    }`}
                     style={{ backgroundColor: c.colorCode || "#ccc" }}
                   />
                 ))}
@@ -114,11 +127,18 @@ useEffect(() => {
             {/* Quantity and Add to Cart */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center border rounded-md">
-                <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100"><Minus className="w-4 h-4" /></button>
+                <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100">
+                  <Minus className="w-4 h-4" />
+                </button>
                 <span className="px-4">{quantity}</span>
-                <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100"><Plus className="w-4 h-4" /></button>
+                <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100">
+                  <Plus className="w-4 h-4" />
+                </button>
               </div>
-              <button onClick={handleAddToCart} className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-md hover:bg-black">
+              <button 
+                onClick={handleAddToCart} 
+                className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-md hover:bg-black"
+              >
                 Add To Cart
               </button>
             </div>
@@ -127,7 +147,13 @@ useEffect(() => {
             <div className="grid grid-cols-2 gap-4">
               {product.productOverview.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  {item.icon && <img src={`http://localhost:3001/${item.icon}`} alt="icon" className="w-5 h-5" />}
+                  {item.icon && (
+                    <img 
+                      src={`http://localhost:3001/${item.icon}`} 
+                      alt="icon" 
+                      className="w-5 h-5" 
+                    />
+                  )}
                   <span className="text-sm text-gray-600">{item.label}</span>
                 </div>
               ))}
@@ -140,8 +166,8 @@ useEffect(() => {
           <div>
             <h2 className="text-xl font-semibold mb-4">Features</h2>
             <ul className="list-disc pl-5 space-y-2">
-              {product.features?.map((f, i) => (
-                <li key={i} className="text-gray-700">{f.label}: {f.value}</li>
+              {product.description.features?.map((feature, i) => (
+                <li key={i} className="text-gray-700">{feature}</li>
               ))}
             </ul>
           </div>
@@ -160,7 +186,10 @@ useEffect(() => {
                 <p><strong>Dimensions:</strong> {product.specifications.dimensions?.overall}</p>
                 <p><strong>Weight:</strong> {product.specifications.dimensions?.overallProductWeight}</p>
                 {product.specifications.dimensions?.additionalDimensions?.map((d, i) => (
-                  <p key={i}>{d.label}: {d.value}</p>
+                  <p key={i}><strong>{d.label}:</strong> {d.value}</p>
+                ))}
+                {product.specifications.details?.map((detail, i) => (
+                  <p key={i}><strong>{detail.label}:</strong> {detail.value}</p>
                 ))}
               </div>
             )}

@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useWishlist } from "../context/wishlistcontext";
 import { useCart } from "../context/cartcontext";
 import { toast } from "react-toastify";
 
-const Productcards = ({ headline, subheading, products }) => {
+const Productcards = ({ headline, subheading, products,tag}) => {
   const [visibleProducts, setVisibleProducts] = useState(7);
   const { toggleWishlist, wishlist } = useWishlist();
   const { addToCart } = useCart();
+   const navigate = useNavigate();
 
-  const handleSeeMore = () => {
-    setVisibleProducts((prevVisible) => prevVisible + 10);
-  };
+  
 
   const isInWishlist = (productId) =>
     wishlist?.some(
@@ -35,6 +34,14 @@ const Productcards = ({ headline, subheading, products }) => {
     } catch (error) {
       console.error("Wishlist toggle failed", error);
       toast.error("Failed to update wishlist");
+    }
+  };
+
+   const handleSeeMore = () => {
+    if (tag) {
+      navigate(`/filter?tag=${encodeURIComponent(tag)}`);
+    } else {
+      navigate(`/filter`);
     }
   };
 
