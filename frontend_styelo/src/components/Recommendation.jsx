@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Productcards from '../components/cards';
 
-const NewArrivals = () => {
+const Recommended = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,9 +36,10 @@ const NewArrivals = () => {
         products={products} 
         headline="Recommended" 
         subheading="Visit Styelo to see amazing creations from our designers."
+        
       />
     </div>
   );
 };
 
-export default NewArrivals;
+export default Recommended;
