@@ -59,11 +59,11 @@ const ProductDetails = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="flex flex-col-reverse lg:flex-row gap-4">
-            <div className="flex lg:flex-col gap-2 lg:w-20">
+            <div className="flex lg:flex-col gap-2 lg:w-28">
               {images.map((image, index) => (
                 <button
                   key={index}
@@ -75,13 +75,13 @@ const ProductDetails = () => {
                   <img
                     src={`http://localhost:3001/${image}`}
                     alt={`Product view ${index + 1}`}
-                    className="w-16 h-16 object-cover"
+                    className="w-[104px] h-[103px] object-cover"
                   />
                 </button>
               ))}
             </div>
             <div className="flex-1">
-              <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
+              <div className="w-full h-[600px] rounded-lg overflow-hidden bg-gray-100">
                 {images.length > 0 ? (
                   <img
                     src={`http://localhost:3001/${images[selectedImage]}`}
@@ -101,6 +101,21 @@ const ProductDetails = () => {
           <div className="space-y-6">
             <h1 className="text-3xl font-semibold">{product.name}</h1>
             <div className="text-2xl font-bold">Rs. {product.price}</div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`w-5 h-5 ${
+                      star <= 4 ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-200 text-gray-200'
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-gray-600">5 Customer Review</span>
+            </div>
 
             <p className="text-gray-600">{product.description.summary}</p>
 
@@ -143,26 +158,38 @@ const ProductDetails = () => {
               </button>
             </div>
 
-            {/* Product Overview */}
-            <div className="grid grid-cols-2 gap-4">
-              {product.productOverview.map((item, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  {item.icon && (
-                    <img 
-                      src={`http://localhost:3001/${item.icon}`} 
-                      alt="icon" 
-                      className="w-5 h-5" 
-                    />
-                  )}
-                  <span className="text-sm text-gray-600">{item.label}</span>
-                </div>
-              ))}
+            {/* At a Glance */}
+            <div>
+              <h3 className="text-sm font-medium mb-3">At a Glance</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {product.productOverview.map((item, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    {item.icon && (
+                      <img 
+                        src={`http://localhost:3001/${item.icon}`} 
+                        alt="icon" 
+                        className="w-5 h-5" 
+                      />
+                    )}
+                    <span className="text-sm text-gray-600">{item.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Accordion Section */}
         <div className="mt-16 space-y-8">
+          {/* Description */}
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Description</h2>
+            <p className="text-gray-700 leading-relaxed">
+              {product.description.description}
+            </p>
+          </div>
+
+          {/* Features */}
           <div>
             <h2 className="text-xl font-semibold mb-4">Features</h2>
             <ul className="list-disc pl-5 space-y-2">
@@ -183,13 +210,60 @@ const ProductDetails = () => {
             </button>
             {showSpecification && (
               <div className="p-4 border-t">
-                <p><strong>Dimensions:</strong> {product.specifications.dimensions?.overall}</p>
-                <p><strong>Weight:</strong> {product.specifications.dimensions?.overallProductWeight}</p>
-                {product.specifications.dimensions?.additionalDimensions?.map((d, i) => (
-                  <p key={i}><strong>{d.label}:</strong> {d.value}</p>
-                ))}
+                {/* Specification Image */}
+                {product.specifications.specificationImage && (
+                  <div className="mb-6">
+                    <h3 className="font-semibold mb-3">Product Dimensions</h3>
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <img
+                        src={`http://localhost:3001/${product.specifications.specificationImage}`}
+                        alt="Product Dimensions"
+                        className="w-full max-w-[566px] h-auto mx-auto"
+                        style={{ maxHeight: '630px' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Other Dimensions Table */}
+                {product.specifications.dimensions?.additionalDimensions && 
+                 product.specifications.dimensions.additionalDimensions.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="font-semibold mb-3">Other Dimensions</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border border-gray-300">
+                        <tbody>
+                          {product.specifications.dimensions.additionalDimensions.map((dimension, i) => (
+                            <tr key={i} className="border-b border-gray-300">
+                              <td className="px-4 py-2 font-medium bg-gray-50 border-r border-gray-300">
+                                {dimension.label}
+                              </td>
+                              <td className="px-4 py-2">
+                                {dimension.value}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Basic Dimensions */}
+                <div className="space-y-2 mb-4">
+                  {product.specifications.dimensions?.overall && (
+                    <p><strong>Overall Dimensions:</strong> {product.specifications.dimensions.overall}</p>
+                  )}
+                  {product.specifications.dimensions?.overallProductWeight && (
+                    <p><strong>Overall Product Weight:</strong> {product.specifications.dimensions.overallProductWeight}</p>
+                  )}
+                </div>
+
+                {/* Additional Details */}
                 {product.specifications.details?.map((detail, i) => (
-                  <p key={i}><strong>{detail.label}:</strong> {detail.value}</p>
+                  <p key={i} className="mb-2">
+                    <strong>{detail.label}:</strong> {detail.value}
+                  </p>
                 ))}
               </div>
             )}

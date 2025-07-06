@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+import image1 from '../assets/product1.jpg';
+import image2 from '../assets/product2.jpeg';
+import image3 from '../assets/product3.jpg';
+import image4 from '../assets/product4.webp';
 
 const BestsellerSection = ({ products = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
 
-  // Sample data if no products provided
-  const defaultImages = [
-    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=600&fit=crop",
-    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop"
-  ];
+  const importedImages = [image1, image2, image3, image4];
 
   const images = products.length > 0 
     ? products.slice(0, 4).map(product => `http://localhost:3001/${product.thumbnail}`)
-    : defaultImages;
+    : importedImages;
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -28,8 +29,12 @@ const BestsellerSection = ({ products = [] }) => {
     setCurrentSlide(index);
   };
 
+  const handleBuyTodayClick = () => {
+    navigate(`/filter?tag=${encodeURIComponent("Best Seller")}`);
+  };
+ 
   return (
-    <div className="bg-[#82562540] font-[Poppins]">
+    <div className="bg-[#82562550] font-[Poppins]">
       <div className="max-w-7xl mx-auto px-4 py-16">
         <div className="grid lg:grid-cols-5 gap-12 items-center">
           
@@ -44,15 +49,16 @@ const BestsellerSection = ({ products = [] }) => {
               Our designer already made a lot of beautiful prototype of rooms that inspire you
             </p>
             
-            <button className="bg-[#B88E2F] hover:bg-[#9A7528] text-white px-8 py-3 font-medium transition-colors duration-300">
+            <button 
+              onClick={handleBuyTodayClick}
+              className="bg-[#B88E2F] hover:bg-[#9A7528] text-white px-8 py-3 font-medium transition-colors duration-300"
+            >
               Buy Today
             </button>
           </div>
 
-         
           <div className="lg:col-span-3 relative">
-            <div className="relative w-full h-[530px] flex">
-              
+            <div className="relative w-[780px] h-[530px] flex">
               
               <div className="relative w-[800px] h-[560px]  mr-6">
                 <img
@@ -62,8 +68,7 @@ const BestsellerSection = ({ products = [] }) => {
                 />
               </div>
 
-              
-              <div className="relative w-[690px] h-[450px]  z-10 mt-12">
+              <div className="relative w-[780px] h-[450px]  z-10 mt-12">
                 <img
                   src={images[(currentSlide + 1) % images.length]}
                   alt="Background bestseller"
