@@ -9,8 +9,9 @@ router.post(
   '/',
   upload.fields([
     { name: 'thumbnail', maxCount: 1 },
-    { name: 'furnitureimages', maxCount: 15 },
+    { name: 'furnitureimages', maxCount: 20 },
     { name: 'productIcons', maxCount: 10 },
+    { name: "specificationImage", maxCount: 1 }
   ]),
   furnitureController.createFurniture
 );
@@ -20,8 +21,9 @@ router.put(
   '/:id',
   upload.fields([
     { name: 'thumbnail', maxCount: 1 },
-    { name: 'furnitureimages', maxCount: 10 },
+    { name: 'furnitureimages', maxCount: 50 },
     { name: 'productIcons', maxCount: 10 },
+    { name: "specificationImage", maxCount: 1 }
   ]),
   furnitureController.updateFurniture
 );
