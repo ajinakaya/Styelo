@@ -35,6 +35,7 @@ router.get('/all', furnitureController.getAllFurniture);
 router.get('/search', filterController.searchFurniture);
 
 router.get('/filter', filterController.filterFurniture);
+router.get('/colors', filterController.getAvailableColors);
 
 router.get('/tag/:tagName', filterController.getFurnitureByTag);
 router.get('/:id', furnitureController.getFurnitureById);

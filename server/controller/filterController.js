@@ -91,8 +91,40 @@ const getFurnitureByTag = async (req, res) => {
   }
 };
 
+const getAvailableColors = async (req, res) => {
+  try {
+
+    const furniture = await Furniture.find({}, 'colorOptions');
+
+    const colorMap = new Map();
+    
+    furniture.forEach(item => {
+      if (item.colorOptions && item.colorOptions.length > 0) {
+        item.colorOptions.forEach(colorOption => {
+          if (colorOption.color && colorOption.colorCode) {
+            const colorKey = colorOption.color.toLowerCase();
+            if (!colorMap.has(colorKey)) {
+              colorMap.set(colorKey, {
+                name: colorOption.color,
+                code: colorOption.colorCode
+              });
+            }
+          }
+        });
+      }
+    });
+    const uniqueColors = Array.from(colorMap.values())
+      .sort((a, b) => a.name.localeCompare(b.name));
+    
+    res.status(200).json(uniqueColors);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   searchFurniture,
   filterFurniture,
   getFurnitureByTag,
+  getAvailableColors
 };
