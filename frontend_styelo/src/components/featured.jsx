@@ -10,7 +10,7 @@ const Featured = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/furniture/tag/New Arrival");
+        const response = await axios.get("http://localhost:3001/furniture/tag/Featured");
         setProducts(response.data);
         setLoading(false);
       } catch (error) {

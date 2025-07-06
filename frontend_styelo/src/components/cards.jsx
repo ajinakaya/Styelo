@@ -6,7 +6,7 @@ import { useCart } from "../context/cartcontext";
 import { toast } from "react-toastify";
 
 const Productcards = ({ headline, subheading, products }) => {
-  const [visibleProducts, setVisibleProducts] = useState(10);
+  const [visibleProducts, setVisibleProducts] = useState(7);
   const { toggleWishlist, wishlist } = useWishlist();
   const { addToCart } = useCart();
 
@@ -72,11 +72,11 @@ const Productcards = ({ headline, subheading, products }) => {
 
                   <div className="flex-1 pl-1 p-6 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-semibold text-[23px] text-gray-900 mb-1 leading-tight ">
+                      <h3 className="font-semibold text-[22px] text-gray-900 mb-1 leading-tight ">
                         {product.name}
                       </h3>
 
-                      <p className="text-[16px] text-black/62 mb-1 font-medium">
+                      <p className="text-[15px] text-black/62 mb-1 font-medium">
                         Size:{" "}
                         <span className="text-black/62">
                           {product.specifications?.dimensions?.overall}
