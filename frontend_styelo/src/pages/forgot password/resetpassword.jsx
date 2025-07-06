@@ -3,7 +3,7 @@ import { Eye, EyeOff, KeyRound, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import logo from "../assets/logo1.png";
+import logo from "../../assets/logo1.png";
 
 const SetNewPassword = () => {
   const [newPassword, setNewPassword] = useState("");
