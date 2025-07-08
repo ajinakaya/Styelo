@@ -58,6 +58,7 @@ const SignInPage = () => {
         navigate("/admin/dashboard");
       } else {
         navigate("/");
+        window.location.reload();
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Login failed");
