@@ -62,16 +62,7 @@ const App = () => {
       <Route path="/decor" element={<Decors />} />
       <Route path="/room" element={<RoomDesigner />} />
       <Route path="/admin/furniture-management" element={<FurnitureManagement />} />
-      {/* Add more routes as needed */}
-      
-   
-      
-
-      
-
-      
-     
-
+  
     </Routes>
     </>
   );
