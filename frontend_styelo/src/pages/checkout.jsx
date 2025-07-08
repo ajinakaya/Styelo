@@ -93,6 +93,7 @@ const Checkout = () => {
         subtotal,
       },
     });
+     window.location.reload();
   };
 
   return (
