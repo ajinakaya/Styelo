@@ -13,7 +13,6 @@ createRoot(document.getElementById("root")).render(
       <WishlistProvider>
         <CartProvider>
           <OrderProvider>
-
         <App />
           </OrderProvider>
         </CartProvider>
