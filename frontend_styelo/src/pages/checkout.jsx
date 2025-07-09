@@ -85,15 +85,17 @@ const Checkout = () => {
       return;
     }
 
-    navigate("/payment", {
+    navigate("/payment",
+       {
       state: {
         selectedShipping,
         formData,
         total,
         subtotal,
       },
+      
     });
-     window.location.reload();
+     
   };
 
   return (
